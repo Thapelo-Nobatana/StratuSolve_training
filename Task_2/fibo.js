@@ -27,7 +27,7 @@ const fibo = (n) => {
  
  let stringNum = sequence.join(' + ');
 
-    //  console.log(stringNum,` = ${n}`);
+    
 
  return `${stringNum} = ${n}`;
 }
