@@ -2,37 +2,25 @@
 
 
 const fibo = (n) => {
- if(n === 1) {
-    return 1
- }
+
  if(n === 0) {
     return 0
  }
+ let prevNum = 0;
+ let currNum = 1;
+ let sequence = [0,1,];
+   while ( currNum < n) {
 
- let prevNum = 0
- let currNum = 1
- let sequence = []
-
- for ( let i = 2; i < n; i++){
-    let nextNum = prevNum + currNum
-
-    prevNum = currNum
-    currNum = nextNum
-    if (currNum === n) {
-       break;
-    }
-    sequence.push(currNum)
- } 
-     
- 
- let stringNum = sequence.join(' + ');
-
+      let nextNum = prevNum + currNum
+      prevNum = currNum
+      currNum = nextNum
+   if (n => currNum) {
+      sequence.push(nextNum) 
+     } 
+   }
     
-
- return `${stringNum} = ${n}`;
+ return sequence;
 }
+let result = fibo(34);
 
-
-let result = fibo(55);
-
-console.log(result);
+console.log(result.join(', '));
