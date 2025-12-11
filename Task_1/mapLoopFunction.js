@@ -2,14 +2,17 @@
 
 function addAll(array) {
   let totalSum = 0;
-  let partsNumbers = [];
-
-    array.map(num => {totalSum += num 
-         partsNumbers.push(totalSum);  
-    });
+  
+  array.map(() => {
+    const currentSum = array.reduce((acc, val) => acc + val, 0);
+    totalSum += currentSum;
    
-  let sumNumbers = partsNumbers.map((_, index) => totalSum - index).join('+');
+    array.pop();
+  })
+   
 
-    return `${sumNumbers} = ${totalSum}`
+
+    return totalSum
 }
-console.log(addAll([1, 1, 1, 1, 1])); // "5+4+3+2+1 = 5"
+console.log(addAll([1, 1, 1, 1, 1, 6])); 
+
