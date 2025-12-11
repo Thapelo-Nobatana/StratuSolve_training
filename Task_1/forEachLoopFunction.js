@@ -1,21 +1,20 @@
 // creating a function that uses forEach loop to iterate over an array
 
+
 function addAll(array) {
     let totalSum = 0;
-    let partsNumbers = [];
 
-    array.forEach(num => totalSum += num);
-    
-    while (totalSum > 0) {
-        partsNumbers.push(totalSum);
-        totalSum--;
+    while ( array.length > 0 ) {
+
+    let acc = 0;
+        array.forEach(element => {
+            acc = acc + element;
+        });
+        array.pop();
     }
 
-    let totalNumers = partsNumbers.join('+');
-
-    return `${totalNumers} = ${partsNumbers.length}`;
+    return totalSum;
 }
+let array = [2, 1, 1, 1, 1,];
 
-let array = [1, 1, 1, 1, 1];
-
-console.log(addAll(array)); // "5+4+3+2+1 = 5"
+console.log(addAll(array)); 
