@@ -1,17 +1,15 @@
 // creating a function uses recursion to iterate over an array
 
-function addAll(array, index = 0, totalSum = 0) {
-    if (index === array.length) {
-        let partsNumbers = [];
-        for (let i = totalSum; i > 0; i--) {
-            partsNumbers.push(i);
-        }
-        let totalNumers = partsNumbers.join('+');
-        return `${totalNumers} = ${totalSum}`;
+function addAll(array) {
+    if (array.length === 0) {
+        return 0;
     }
-    return addAll(array, index + 1, totalSum + array[index]);
+
+    const currentSum = array.reduce((acc, val) => acc + val, 0);
+ 
+     array.pop();
+     return currentSum + addAll(array);
 }
+let array = [1, 1, 1, 1,1, 6]; 
 
-let array = [1, 1, 1, 1, 1];
-
-console.log(addAll(array)); // "5+4+3+2+1 = 5"
+console.log(addAll(array)); 
