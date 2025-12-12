@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="eng">
+    <head>
+        <meta charset="UTF-8">
+        <title>Fibo Count:</title>
+        <style>
+            body {
+               display: flex;
+               justify-items: center;
+               align-items: center;
+               align-content: center;
+               flex-direction: column;
+               padding: 20px;
+               /* border: solid black 2px; */
+               flex-wrap: wrap;
+            }
+            .container {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                flex-direction: column;
+                gap: 10px;
+                /* border: blue solid 2px; */
+                margin: 30px;
+            }
+
+            /* div {
+                width: 300px;
+                display: flex;
+                flex-wrap: wrap;  
+                 border: 2px solid black;
+                flex-flow: row wrap;
+                margin: auto;
+            } */
+        div {
+               width: 300px;
+               word-spacing: 30px;
+                word-wrap: break-word;
+            }
+        
+        </style>
+    </head>
+    <body>
+
+         <main class="container">
+
+            <h2>Fibonacci Sequence</h2>
+
+            <label for="inputNum">
+                Enter Number:
+                <input id="inputNum" type="number" max="94" />
+            </label>
+
+                <button onclick="resultInput()">
+                    Enter
+                </button>
+           
+           
+           
+               <div id="display" ></div>
+         </main>
+
+         
+            
+
+
+        <script src="/Task_2/fiboCount.js">
+
+        </script>
+    </body>
+
+
+
+</html>
