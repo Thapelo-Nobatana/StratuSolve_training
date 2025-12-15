@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Pokemon-Data</title>
+        <meta charset="utf-8"/>
+        <style>
+            body {
+                background-color: #2c2c2c;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+            main {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                border: white 2px;
+            }
+
+            .header {
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                gap: 40px;
+            }
+
+          .pokinput {
+            display: flex;
+            align-items: center;
+            gap:  30px;
+          }
+          span {
+            font-size: large;
+          }
+
+          input {
+             border-radius: 8px;;
+            height: 30px;
+            border: none;
+          }
+          input:hover {
+            border: 2px solid mediumseagreen;
+          }
+          label {
+            color: antiquewhite;
+          }
+          .card {
+            width: 433px;
+            height: 599.6px;
+            background-color: #ffffff;
+            border-radius: 10px;
+          }
+          .card.disabled {
+            display: none;
+        }
+          .card:hover {
+            border: 5px solid #FF762D;
+            animation: linear;
+          }
+
+          #Description {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+          }
+          .types {
+            display: flex;
+            gap: 30px;
+          }
+          .type {
+            width: 90px;
+            height: 37px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #FF762D;
+            border-radius: 20%;
+            color: wheat;
+          }
+        </style>
+    </head>
+    <body>
+        
+        <main>
+            <div class="header">
+                 <header><img src="./Logo.png"  alt="logo"/></header>
+                  <div class="pokinput">
+                       <label for="Pokemon"><span class="poki">Pokemon Name:    </span>
+                        <input id="Pokemon" type="text"  /> </label>
+                        <img src="./pokeboll.png" id="fetchedDataBtn" width=" 40px" style="cursor: pointer;"/>
+                  </div>
+
+
+                  <div id="card" class="card disabled">
+                     <div id="pokiImage">
+
+                     </div>
+                     <div id="Description" >
+                        <h1 id="name"></h1>
+                        <div id="types" class="types">
+
+                        </div>
+
+                     </div>
+                  </div>
+              
+            </div>
+           
+        </main>
+         
+        <script>
+            const card = document.getElementById('card');
+            const pokiImage = document.getElementById('pokiImage');
+            const input = document.getElementById('Pokemon');
+            const button = document.getElementById('fetchedDataBtn');
+            const description = document.getElementById('Description');
+            const h1 = document.getElementById('name');
+            const spanTypes = document.getElementById('types');
+
+            async function fetchData(pokemanName) {
+
+                try {
+                    // fetch Data
+                    const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${pokemanName}`);
+
+                    // parse Data
+                    const data = await response.json()
+
+                    // GET POkimon Image
+                     pokiImage.innerHTML = ` <img src="${data.sprites.front_default}" width="100%"/>
+                    `;
+                                    
+                    // make the card visble and display pokimon name
+                    card.classList.remove("disabled");
+                    h1.innerHTML = `${data.name}`;
+
+
+                   // Get data type
+                //  const reponseDataType = await fetch(`https://pokeapi.co/api/v2/pokemon/${pokemanName}`)
+                  const types = data.types
+                //    console.log(data.types);
+
+                 types.map((type) => {
+
+                    // spanTypes.appendChild(document.createElement('div'))
+                    spanTypes.innerHTML = `<divclass="type">${type.type.name}</div>`
+                   
+
+
+                 } )
+
+                }catch(error){
+                   
+                    alert("Pokemon not found")
+                }
+  
+            }
+
+
+
+            button.addEventListener("click", () => {
+               const nameOfPoki = input.value.toLowerCase().trim()
+
+                fetchData(nameOfPoki)
+            })
+            ;
+
+
+        </script>
+    </body>
+</html>
