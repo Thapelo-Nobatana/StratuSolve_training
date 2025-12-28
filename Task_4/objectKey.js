@@ -16,19 +16,10 @@ function groupByOwner(head) {
     
 	
      for( const key in head){
-        	 const value = head[key]
+         const value = head[key]
           
-       
-	
-		 if(newGear.hasOwnProperty(value)) {
-
-			newGear[value].push(key)
-		 } else if(!newGear.hasOwnProperty(value)) {
-			 
-			newGear[value] = [key]
-		 }
-		 
-	    }
+        newGear.hasOwnProperty(value) ? newGear[value].push(key) : newGear[value] = [key]
+	  }
 	
   return newGear
 }
