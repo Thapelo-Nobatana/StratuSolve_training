@@ -4,14 +4,14 @@
         <meta charset="UTF-8">
         <title>Fibo Count:</title>
         <style>
-            body {
+            .parent-container {
                display: flex;
                justify-items: center;
                align-items: center;
                align-content: center;
                flex-direction: column;
                padding: 20px;
-               /* border: solid black 2px; */
+               
                flex-wrap: wrap;
             }
             .container {
@@ -20,27 +20,19 @@
                 justify-content: center;
                 flex-direction: column;
                 gap: 10px;
-                /* border: blue solid 2px; */
+               
                 margin: 30px;
             }
-
-            /* div {
-                width: 300px;
-                display: flex;
-                flex-wrap: wrap;  
-                 border: 2px solid black;
-                flex-flow: row wrap;
-                margin: auto;
-            } */
-        div {
+        
+        #display {
                width: 300px;
                word-spacing: 30px;
                 word-wrap: break-word;
             }
-        
+
         </style>
     </head>
-    <body>
+    <body class="parent-container">
 
          <main class="container">
 
@@ -48,7 +40,7 @@
 
             <label for="inputNum">
                 Enter Number:
-                <input id="inputNum" type="number" max="94" />
+                <input id="inputNum" type="number" max="1000" />
             </label>
 
                 <button onclick="resultInput()">
@@ -57,12 +49,8 @@
            
            
            
-               <div id="display" ></div>
+               <div id="display"  class="Fibonacci"></div>
          </main>
-
-         
-            
-
 
         <script src="/Task_2/fiboCount.js">
 
