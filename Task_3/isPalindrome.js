@@ -13,4 +13,4 @@ const result = isPalindrome("rac'car");
 
 
 
-        //  let reversedStr = str.trim().replace(/\s+/g, '').toLowerCase().split('').reverse().join('');
+      
