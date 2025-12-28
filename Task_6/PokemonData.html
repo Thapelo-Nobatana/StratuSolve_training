@@ -4,13 +4,13 @@
         <title>Pokemon-Data</title>
         <meta charset="utf-8"/>
         <style>
-            body {
+            .parent-container {
                 background-color: #2c2c2c;
                 display: flex;
                 justify-content: center;
                 align-items: center;
             }
-            main {
+            .child-container {
                 display: flex;
                 justify-content: center;
                 align-items: center;
@@ -30,19 +30,19 @@
             align-items: center;
             gap:  30px;
           }
-          span {
+          .pokemon-span {
             font-size: large;
           }
 
-          input {
+          #Pokemon-input {
              border-radius: 8px;;
             height: 30px;
             border: none;
           }
-          input:hover {
+          #Pokemon:hover {
             border: 2px solid mediumseagreen;
           }
-          label {
+          .pokemon-label {
             color: antiquewhite;
           }
           .card {
@@ -81,14 +81,14 @@
           }
         </style>
     </head>
-    <body>
+    <body class="parent-container">
         
-        <main>
+        <main class="child-container">
             <div class="header">
                  <header><img src="./Logo.png"  alt="logo"/></header>
                   <div class="pokinput">
-                       <label for="Pokemon"><span class="poki">Pokemon Name:    </span>
-                        <input id="Pokemon" type="text"  /> </label>
+                       <label class="pokemon-label" for="Pokemon"><span class="pokemon-span">Pokemon Name:    </span>
+                        <input id="Pokemon-input" type="text"  /> </label>
                         <img src="./pokeboll.png" id="fetchedDataBtn" width=" 40px" style="cursor: pointer;"/>
                   </div>
 
@@ -113,7 +113,7 @@
         <script>
             const card = document.getElementById('card');
             const pokiImage = document.getElementById('pokiImage');
-            const input = document.getElementById('Pokemon');
+            const input = document.getElementById('Pokemon-input');
             const button = document.getElementById('fetchedDataBtn');
             const description = document.getElementById('Description');
             const h1 = document.getElementById('name');
@@ -134,19 +134,18 @@
                                     
                     // make the card visble and display pokimon name
                     card.classList.remove("disabled");
+
+                    // display pokimon name
                     h1.innerHTML = `${data.name}`;
 
-
                    // Get data type
-                //  const reponseDataType = await fetch(`https://pokeapi.co/api/v2/pokemon/${pokemanName}`)
-                  const types = data.types
-                //    console.log(data.types);
+                   const types = data.types
+            
 
                  types.map((type) => {
 
-                    // spanTypes.appendChild(document.createElement('div'))
+                  
                     spanTypes.innerHTML = `<divclass="type">${type.type.name}</div>`
-                   
 
 
                  } )
@@ -158,14 +157,12 @@
   
             }
 
-
-
             button.addEventListener("click", () => {
                const nameOfPoki = input.value.toLowerCase().trim()
 
                 fetchData(nameOfPoki)
-            })
-            ;
+            });
+            
 
 
         </script>
