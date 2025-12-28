@@ -8,9 +8,7 @@ function fiboRecursive(n, prev = 0, curr = 1, sequence = [0, 1]) {
   
     return sequence;
    }
-
-   
-     sequence.push(next);
+   sequence.push(next);
   return fiboRecursive(n, curr, next, sequence);
 }
 
