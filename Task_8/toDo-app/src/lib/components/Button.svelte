@@ -10,7 +10,7 @@
   } = $props();
 
   const base =
-    'px-4 py-2 w-full  rounded font-medium transition focus:outline-none focus:ring';
+    'px-4 py-2 w-full  rounded font-medium transition focus:outline-none focus:ring cursor-pointer';
 
   const variants = {
     primary: 'bg-blue-600 text-white hover:bg-blue-700 focus:ring-blue-300',

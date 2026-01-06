@@ -2,13 +2,25 @@
 import { userValues } from "$lib/stores/auth.svelte";
 const API_URL = 'http://localhost:8100';
 
+
+
+
+// GET TASKS
 export async function fetchTasks() {
-  const res = await fetch(`${API_URL}/tasks`,{
+  try{
+    const res = await fetch(`${API_URL}/tasks`,{
       headers: { 'Content-Type': 'application/json' ,'Authorization':userValues.userId},
   });
   return await res.json();
+
+  }
+  catch{
+    console.error({err: "Maybe not logged in ? or authed"})
+    return []
+  }
 }
 
+// POST TASKS
 export async function createTask(task) {
   if (!userValues.userId)
     return
@@ -29,7 +41,13 @@ export async function createTask(task) {
   }
 }
 
+
+
+// UPDATE TASKS
 export async function updateTask(data) {
+  if(!userValues.userId){
+    return
+  }
   const res = await fetch(`${API_URL}/tasks/${data.id}`, {
     method: 'PUT',
     headers: { 'Content-Type': 'application/json','Authorization':userValues.userId},
@@ -38,8 +56,27 @@ export async function updateTask(data) {
     return await res.json();
 }
 
+
+
+
+// DELETE TASKS
 export async function deleteTask(id) {
-  await fetch(`${API_URL}/tasks/${id}`, {
-    method: 'DELETE'
+  if(!userValues.userId){
+    return 
+  }
+  try {
+      const res = await fetch(`${API_URL}/tasks/${id}`, {
+    method: 'DELETE',
+    headers: { 'Authorization':userValues.userId},
+    
   });
+  return await res.json();
+
+  } catch  {
+
+    console.log("Error onDelete", userValues);
+    return { err: "error on delete"};
+
+  }
+
 }

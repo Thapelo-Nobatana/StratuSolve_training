@@ -3,7 +3,7 @@
 
 // @ts-nocheck
 
-    let { tasks, onToggle, refresh , onDelete } = $props();
+    let { tasks, refresh } = $props();
    
 
 </script>
@@ -12,6 +12,6 @@
 
 <ul class="space-y-2 ">
   {#each tasks as  task}
-    <TodoItem  task={task} onToggle={onToggle} refresh={refresh}  onDelete={onDelete}/>
+    <TodoItem  task={task} refresh={refresh}  />
   {/each}
 </ul>

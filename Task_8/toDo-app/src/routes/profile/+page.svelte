@@ -1,36 +1,46 @@
 <script>
     // @ts-nocheck
     import { fetchTasks } from '$lib/api/tasks';
+   
 	import Button from '$lib/components/Button.svelte';
    
-    import { user, updateProfile } from '$lib/stores/auth.svelte.js'
+    import {  user,userValues, updateProfile } from '$lib/stores/auth.svelte.js'
      import defaultPhoto from '$lib/assets/default.png';
     import { onMount } from 'svelte';
+	import { goto } from '$app/navigation';
 
+     // user edit
     let isEditing = $state(false);
-
     let username = $state('');
     let email = $state('')
     let password = $state('');
     let photo = $state(null);
     let completedTasks = $state([]);
+     
+
 
     onMount( async () => {
       
-       
+       if(!user){
+        goto('/login');
+       }
 
-        if($user) {
-            username = $user.username;
-            email = $user.email
-            photo = $user.photo;
+        if(userValues) {
+            username = userValues.username;
+            email = userValues.email
+            photo = userValues.photo;
         }
         
-            const allTasks = await fetchTasks($user.id)
-            completedTasks = tasks.filter(t => t.completed);
-        
-       
-    });
+            const allTasks = await fetchTasks(userValues.id)
+            console.log("all tasks",allTasks)
+            if (allTasks.error ){
+                goto('/login')
+            }
+            completedTasks = allTasks.filter(t => t.completed);
 
+    });
+    
+ 
     
     // load Photo on Profile
     function handlePhoto(e) {
@@ -46,22 +56,29 @@
         reader.readAsDataURL(file)
     }
   
-    // update the Profile info
-    function saveProfile() {
-        updateProfile({
+    // update the Profile 
+    async function saveProfile() {
+
+      const res = await updateProfile({
             username,
-            ...(password && { password}),
-            ...(photo && { photo }),
-            ...(email && {email})
+            email,
+            password,
+            photo
         });
+
+        const data = await res.json()
+
+       
      
       password = '';
       isEditing = false;
     }
+
+
 </script>
- {#if user}
- <div class="space-y-4 items-center">
-        <div class="flex items-center p-8 gap-4">
+ {#if userValues}
+ <div class="space-y-4 flex flex-col items-center">
+        <div class="flex w-full items-center p-8 gap-1">
             <div class="self-start">
                 <a href="/" class=" hove:font-bold ">BACK</a>
             </div>
@@ -72,8 +89,8 @@
                 {#if !isEditing}
                     <div class="flex flex-col items-center gap-4">
                     <img src={ photo || defaultPhoto} class="w-24 h-24 rounded-full" alt="profile"/>
-                    <p class="text-lg font-semibold">{$user.username}</p>
-                    <p class="text-sm text-gray-500">{$user.email}</p>
+                    <p class="text-lg font-semibold">{userValues.username}</p>
+                    <p class="text-sm text-gray-500">{userValues.email}</p>
                     <button class="bg-blue-600 text-white px-4 py-2 rounded" onclick={() => isEditing = true}>
                         Edit Profile
                     </button>
@@ -93,13 +110,25 @@
                 {/if}
             </div>
         </div>
+
+
         {#if completedTasks.length > 0}
-            <div class="bg-white flex flex-col gap-2 p-6 items-center rounded shadow-lg max-w-md mx-auto mt-6">
+            <div class="bg-white w-full flex flex-col gap-2 p-6 items-center rounded shadow-lg max-w-md mx-auto mt-6">
                 <h3 class="text-lg font-bold mb-2">Completed Tasks</h3>
                 <ul class="list-disc list-inside space-y-1">
                     {#each completedTasks as task}
-                      <li class="bg-green-600 ">
-                        <span><a href="/">{task.title}</a></span>: {task.description}
+                      <li class=" flex flex-col gap-2 rounded bg-green-600 ">
+                            <a href="/">
+                                <div>
+
+                                Title: {task.title} 
+                                 </div>
+                                 <div>
+                                    
+                                 Description: {task.description}
+                                 </div>
+                                </a>
+                         
                       </li>
                     {/each}
                 </ul>
