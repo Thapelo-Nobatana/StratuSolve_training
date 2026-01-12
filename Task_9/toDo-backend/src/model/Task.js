@@ -1,6 +1,7 @@
 import db from '../db/database.js';
 
 class Task {
+  
   // Create a new task
   static async create(title, description, userId, completed = false, categoryId = null, ) {
     const sql = `

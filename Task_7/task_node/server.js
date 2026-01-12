@@ -23,7 +23,6 @@ const port = 8100;
     return;
   }
 
-
     // render htmlFile
     if(req.method === "GET" && req.url === '/'){
 
@@ -32,7 +31,7 @@ const port = 8100;
         res.end(htmlFileContent)
         return;
     }
-
+    // load scriptFile
     if(req.method === "GET" && req.url === '/app.js'){
 
         res.setHeader('Content-Type', 'application/json');
@@ -53,7 +52,7 @@ const port = 8100;
     return;
   };
 
-   // POST /people
+   // POST / Create Person
   if (req.method === "POST" && req.url === "/people") {
     let body = "";
 
@@ -68,8 +67,7 @@ const port = 8100;
         data.EmailAddress,
         data.Age
       );
-      res.statusCode = 201;
-    //   res.setHeader("Content-Type", 'application/json');
+      res.statusCode = 200;
       res.end(JSON.stringify({ id }));
     });
     return;
@@ -78,10 +76,13 @@ const port = 8100;
   // update
 
    if (req.method === "PUT" && req.url.startsWith("/people/")) {
+
     const id = req.url.split("/")[2];
+   
     let body = "";
 
     req.on("data", chunk => body += chunk);
+
     req.on("end", async () => {
 
         try {
@@ -96,7 +97,6 @@ const port = 8100;
             );
 
             res.statusCode = 200;
-            res.setHeader('Content-Type', 'application/json')
             res.end(JSON.stringify({ message: "Updated", id }));
             
         } catch (error) {
@@ -121,7 +121,7 @@ const port = 8100;
     }
     return;
   }
-
+   // Delete All People
   if (req.method === "DELETE" && req.url === "/people") {
   await Person.deleteAllPeople();
   res.statusCode = 200;

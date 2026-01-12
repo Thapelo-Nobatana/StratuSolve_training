@@ -8,17 +8,16 @@ function getInputValue(id) {
 }
 
 function setInputValue(id, value) {
-  document.getElementById(id).value = value ?? "";
+  return document.getElementById(id).value = value ?? "";
 }
 
 // renderTable function
+
 function renderTable(people) {
   const tableBody = document.getElementById("peopleTableBody");
   tableBody.innerHTML = "";
-
   people.forEach(person => {
     const row = document.createElement("tr");
-
     row.innerHTML = `
       <td>${person.id}</td>
       <td>${person.firstname}</td>
@@ -27,7 +26,6 @@ function renderTable(people) {
       <td>${person.EmailAddress}</td>
       <td>${person.Age}</td>
     `;
-
     // Click row to fill form
     row.addEventListener("click", () => {
       setInputValue("personId", person.id);
@@ -48,7 +46,6 @@ function renderTable(people) {
 async function loadAll() {
   const res = await fetch(`${API_BASE}/people`);
   const people = await res.json();
-
   renderTable(people);
 }
 

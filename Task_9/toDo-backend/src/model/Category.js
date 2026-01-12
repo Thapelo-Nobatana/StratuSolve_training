@@ -2,12 +2,14 @@ import db from '../db/database.js';
 
 class Category {
   // Create a new category
-  static async create({ name, color }) {
+  static async create( name, color ) {
     const sql = `
       INSERT INTO categories (name, color)
       VALUES (?, ?)
     `;
     const [result] = await db.query(sql, [name, color]);
+    console.log(result, " is adding categories")
+    
     return result.insertId;
   }
 
@@ -20,6 +22,7 @@ class Category {
   // Get all categories
   static async findAll() {
     const [rows] = await db.query('SELECT * FROM categories');
+    console.log("resulted with ",rows) ;
     return rows;
   }
 
