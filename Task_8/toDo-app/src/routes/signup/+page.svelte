@@ -2,7 +2,9 @@
 // @ts-nocheck
 
     import { signup } from '$lib/stores/auth.svelte.js';
-
+    import Swal from 'sweetalert2';
+    import { restoreSessions } from '$lib/stores/auth.svelte.js';
+	import { goto } from '$app/navigation';
     // user input state
     let username = $state('')
     let email = $state('');
@@ -11,38 +13,84 @@
     let errorState = $state('')
 
    // Regex
-    let passwordRegex = /(?=.*?[A-Z]).{4,}$/
-    let emailRegex = /(?=.*?[#?!@$%^&*-].{1})$/
+    let passwordRegex = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/
+
+    let emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
    
-   // show password 
+   // show password
    let isShow = $state(false);
    let isConfim = $state(false);
 
 
-   // Create Account function 
+   // Create Account function
   async function account() {
 
         // validate username
-        if(username === '') return alert("username ia required");
+        if(username === '') {
+
+           return Swal.fire({
+                  icon: "error",
+                  title: "Oops...",
+                  text: "Username is required",
+                });
+        }
 
         // validate email
-        if(email === '') return alert("Email is required");
-        // if(!emailRegex.test(email)) return alert("Please include an '@' in the email address")
-        
-        // validate password
-        if(password === '') return alert("Password is required");
-        if(confirmPassword === '') return alert("Please confirm Password");
-        if(!passwordRegex.test(password)) return alert("password must contain at least 4 characters, including a uppercase letter")
-        if(password !== confirmPassword ) return alert("Invild Password");
+        if(email === '') {
+            return Swal.fire({
+                  icon: "error",
+                  title: "Oops...",
+                  text: "Email is required",
+                });
+        }
 
+
+        // if(!emailRegex.test(email)) return alert("Please include an '@' in the email address")
+        // validate password
+        if(password === '') {
+             return Swal.fire({
+                  icon: "error",
+                  title: "Oops...",
+                  text: "Password is required",
+                });
+        }
+        if(confirmPassword === '') {
+             return Swal.fire({
+                  icon: "error",
+                  title: "Oops...",
+                  text: "Please confirm Password",
+                });
+        }
+        if(!passwordRegex.test(password)) {
+            return Swal.fire({
+                  icon: "error",
+                  title: "Oops...",
+                  text: "Password must be at least 8 characters long and include at least one uppercase letter, one lowercase letter, one number, and one special character.",
+                });
+        }
+        if(password !== confirmPassword ) {
+               return Swal.fire({
+                  icon: "error",
+                  title: "Oops...",
+                  text: "Password and Confirm Password don't Match",
+                });
+
+        }
           // Post signup
         const success = await signup(email,username,password);
-      
         if(!success){
             errorState = "User Already exists"
-            return
+          return Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: "This email address is already registered. Would you like to log in or reset your password?"
+          });
         }
- 
+        // rehydrate session from cookie
+    await restoreSessions();
+
+    // now redirect
+    goto('/');
  }
 </script>
 
@@ -72,7 +120,7 @@
       </button>
     </div>
     
-         <p class="text-blue">{errorState}</p>
+         <p class="text-red-500">{errorState}</p>
    <button class="bg-blue-600 text-white px-4 py-2 w-full  rounded font-medium transition focus:outline-none focus:ring cursor-pointer" onclick={account}>
 
     Create Account

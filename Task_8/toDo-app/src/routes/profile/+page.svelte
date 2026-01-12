@@ -57,21 +57,35 @@
     }
   
     // update the Profile 
+
     async function saveProfile() {
 
-      const res = await updateProfile({
-            username,
-            email,
-            password,
-            photo
-        });
+        try {
+                 const id = userValues.id
 
-        const data = await res.json()
+                const res = await updateProfile(
+                           id,
+                       username,
+                    password,
+                  email,
+                    photo
+                 );
 
-       
-     
-      password = '';
-      isEditing = false;
+        const data = await res.json();
+           console.log("this is the data for update Profile", data);
+           username = '';
+            email = '';
+              password = '';
+
+           return true
+
+        } catch (error) {
+
+              console.log("update error:", error)
+        } finally {
+
+                   isEditing = false;
+        }
     }
 
 
@@ -91,7 +105,7 @@
                     <img src={ photo || defaultPhoto} class="w-24 h-24 rounded-full" alt="profile"/>
                     <p class="text-lg font-semibold">{userValues.username}</p>
                     <p class="text-sm text-gray-500">{userValues.email}</p>
-                    <button class="bg-blue-600 text-white px-4 py-2 rounded" onclick={() => isEditing = true}>
+                    <button class="bg-blue-600 text-white px-4 py-2 rounded cursor-pointer" onclick={() => isEditing = true}>
                         Edit Profile
                     </button>
                     </div>
@@ -121,14 +135,12 @@
                             <a href="/">
                                 <div>
 
-                                Title: {task.title} 
+                                Title: {task.title}
                                  </div>
                                  <div>
-                                    
                                  Description: {task.description}
                                  </div>
                                 </a>
-                         
                       </li>
                     {/each}
                 </ul>

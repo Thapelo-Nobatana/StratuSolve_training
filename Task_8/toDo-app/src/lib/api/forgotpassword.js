@@ -1,28 +1,66 @@
 // @ts-nocheck
 
-const API_URL = 'http://localhost:8100'
+const API_URL = 'http://localhost:8100';
 
+// export async function updatePassword(email, password) {
+// 	try {
+// 		const res = await fetch(`${API_URL}/updatePassword`, {
+// 			method: 'PUT',
+// 			headers: {
+// 				'Content-Type': 'application/json'
+// 			},
 
+// 			body: JSON.stringify({ email, password })
+// 		});
 
-export async function updatePassword(data) {
+// 		if (!res.ok) {
+// 			const err = await res.json();
+// 			console.error('Update password failed:', err);
+// 			return false;
+// 		}
 
-    try{
+// 		const data = await res.json();
+// 		console.log('Password updated:', data);
+// 		return true;
+// 	} catch (error) {
+// 		console.error('Frontend updatePassword error:', error);
+// 		return false;
+// 	}
+// }
 
-         const res = await fetch(`${API_URL}/updatePassword/${data.id}`, {
-                method: "PUT",
-                headers: { 'Content-Type': 'application/json'},
-                body: JSON.stringify(data)
+// Forgot Password email
 
-            })
+export async function sendResetEmail(email) {
+	try {
+		let res = await fetch(`${API_URL}/auth/forgot-password`, {
+			method: 'POST',
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify({ email })
+		});
 
-            const dataResponse = await res.json()
+		return true;
+	} catch {
+		console.error('email failed to send');
+	}
+}
 
-            console.log("this is data from updatePasswo:",dataResponse);
+// Reset Password
 
-    } catch (error) {
-      
-        console.log("Error from update Password: ", error);
-    }
-  
+export async function resetPassword(email, token, password) {
+	try {
+		let res = await fetch(`${API_URL}/auth/reset-password`, {
+			method: 'POST',
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify({ email, token, password })
+		});
 
+		if (res.ok) {
+			console.log('Password updated');
+		}
+
+		return true;
+	} catch (err) {
+		console.error('failed to update password', err);
+		return false;
+	}
 }

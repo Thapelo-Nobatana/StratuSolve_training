@@ -29,7 +29,6 @@
 
         reader.readAsDataURL(file)
     }
-     
 
 
         // update the Profile 
@@ -51,7 +50,6 @@
             <a href="/" class="cursor-pointer">BACK</a>
             </div>
        </div>
-
         <div class="flex w-full items-center p-4 gap-1">
 
                     <div class="bg-white w-full  flex flex-col p-4 items-center rounded shadow-lg max-w-sm max-w-md mx-auto mt-10">
@@ -62,7 +60,7 @@
                             <img src={ photo || defaultPhoto} class="w-24 h-24 rounded-full" alt="profile"/>
                             <p class="text-lg font-semibold"> username: {userValues.username}</p>
                             <p class="text-sm text-gray-500">{userValues.email}</p>
-                            <button class="bg-blue-600 text-white px-4 py-2 rounded" onclick={() => isEditing = true}>
+                            <button class="bg-blue-600 text-white px-4 py-2 rounded cursor-pointer" onclick={() => isEditing = true}>
                                 Edit Profile
                             </button>
                             </div>
@@ -74,7 +72,7 @@
                                 <input type="email"  placeholder="Email" class="w-full p-2 border" bind:value={email}/>
                                 <input type="password" placeholder="New Password" class="w-full p-2 border" bind:value={password} />
                                 <div class="flex  gap-2">
-                                <button class="px-4 py-2 w-full  rounded font-medium transition focus:outline-none focus:ring cursor-pointer bg-blue-600 text-white hover:bg-blue-700 focus:ring-blue-300" onClick={saveProfile}>Save</button>
+                                <button class="px-4 py-2 w-full  rounded font-medium transition focus:outline-none focus:ring cursor-pointer bg-blue-600 text-white hover:bg-blue-700 focus:ring-blue-300 cursor-pointer" onClick={saveProfile}>Save</button>
                                 <Button variant="secondary" onClick={() => isEditing = false}>Cancel</Button>
                                 </div>
                             </div>

@@ -1,16 +1,17 @@
 <script>
 // @ts-nocheck
+   import Swal from "sweetalert2";
+   import { page } from "$app/stores";
+   import { resetPassword } from "$lib/api/forgotpassword";
 
-   import { updatePassword } from "$lib/api/forgotpassword";
-     
-   // input state 
+   // input state
    let email = $state('');
    let newPassword = $state('');
    let confirm = $state('');
+ 
 
 
     //error state
-     
     let errorState = $state('');
 
 
@@ -27,20 +28,75 @@
    async function handleUpdate() {
 
       // validate email
-    if(email === '') return alert("Email is required");
+    if(email === '') {
+          return Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: "Email is required!",
+            });
+    }
 
      // validate new Password
-     if(newPassword === '') return alert("Password is required");
-     if(confirm === '') return alert("Please confirm Password");
-     if(!passwordRegex.test(newPassword)) return alert("password must contain at least 4 characters, including a uppercase letter")
-     if(newPassword !== confirm ) return alert("New Password and Confirm Password don't Match")
-     
-     let success = await updatePassword(email)
+     if(newPassword === '') {
+         return  Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: "Password is required!",
+            });
+     };
+     if(confirm === '') {
+
+          return  Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: " Please confirm Password",
+            });
+
+     }
+     if(!passwordRegex.test(newPassword)) {
+
+            return  Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: "password must contain at least 4 characters, including a uppercase letter",
+            });
+     }
+     if(newPassword !== confirm ) {
+
+                  return  Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: "New Password and Confirm Password don't Match",
+            });
+     }
+     const token = $page.url.searchParams.get("token");
+
+     if(!token) {
+       return Swal.fire({
+         icon: "error",
+         title: "Oops...",
+         text: "Invalid password reset token.",
+       })
+     }
+
+     let success = await resetPassword( email ,token, newPassword)
 
      if(!success) {
-         errorState = "something went wrong somewhere";
+         errorState = "something went wrong. Please try again.";
         return;
      }
+
+     email = '';
+     newPassword = '';
+     confirm = ''
+      errorState = ''
+
+    return  Swal.fire({
+            icon: "success",
+            title: "Success!...",
+            text: "Password updated successfully",
+            });
+
    }
 </script>
 
@@ -49,8 +105,7 @@
 
 <div class="max-w-sm mx-auto flex flex-col items-center mt-20 border rounded-lg p-8 gap-4">
     <h1 class="text-xl font-bold">Update Password</h1>
-    
-   
+
     <input class="w-full p-2 border rounded" type="email" placeholder="Email" bind:value={email}  required/>
     <div class="w-full flex items-center">
       <input class="w-full p-2 border rounded" type={ isShow ? "text": "password"} placeholder="New Password"  title="Must contain at least 4 characters, including a uppercase letter"  autocomplete="new-password" bind:value={newPassword} required/>
@@ -72,8 +127,7 @@
 			   {/if}
       </button>
     </div>
-    
-         <p class="text-blue">{errorState}</p>
+         <p class="text-red-500">{errorState}</p>
    <button class="bg-blue-600 text-white px-4 py-2 w-full  rounded font-medium transition focus:outline-none focus:ring cursor-pointer" onclick={handleUpdate}>
 
       Upadate Password

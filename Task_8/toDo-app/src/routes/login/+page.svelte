@@ -1,7 +1,6 @@
 <script>
     import { login } from '$lib/stores/auth.svelte.js'
-    import { goto } from '$app/navigation'
-	
+   import Swal from 'sweetalert2';
 
     let email = $state("");
     let password = $state("");
@@ -11,7 +10,13 @@
    let isShow = $state(false);
 
     async function submit() {
-        if(email === '') return alert("Email is required")
+        if(email === '') {
+             return Swal.fire({
+                icon: "error",
+                title: "Oops...",
+                text: "Email is required!",
+                });
+        }
          const success = await  login(email, password);
 
                if(!success) {
@@ -20,8 +25,7 @@
                 return
             }
 
-                goto('/');
-         
+      errorState = ''
     }
 
 
@@ -41,12 +45,11 @@
 			   {/if}
       </button>
     </div>
-  
-        <p class="text-red">{errorState}</p>
+        <p class="text-red-500">{errorState}</p>
      <button
       class="bg-blue-600 text-white px-4 py-2 w-full  rounded font-medium transition focus:outline-none focus:ring cursor-pointer"
       onclick={submit}
      >Login</button>
-    <a class="text-blue-400" href="/forgotpassword">Forgot Password</a>
+    <a class="text-blue-400 cursor-pointer" href="/forgotpassword/resetpassword">Forgot Password</a>
 </div>
 

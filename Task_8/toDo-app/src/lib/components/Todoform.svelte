@@ -1,9 +1,8 @@
 <script>
 // @ts-nocheck
-
-  
     import {fetchCategories} from '$lib/api/categories'
    import { createTask } from "$lib/api/tasks";
+   import Swal from 'sweetalert2';
      import { onMount } from 'svelte';
     let { update } = $props()
  let title = $state("");
@@ -26,11 +25,13 @@
            categories = res ;
     }
 
-
-
-
  async function submit() {
-  if(title === "") return alert(" title is required")
+  if(title === "") return Swal.fire({
+  icon: "error",
+  title: "Oops...",
+  text: "Title is required!",
+ 
+});
    // creating a tasking
     const res = await createTask({
       title: title,
@@ -51,10 +52,8 @@
 </script>
 
 <div class="flex flex-col justify-center iterms-center gap-2 mb-4">
-    
-        
- <input class="w-full p-3 border rounded " placeholder=" Enter Title"   bind:value={title} >
- 
+
+ <input class="w-full p-3 border rounded" placeholder=" Enter Title"   bind:value={title} >
  <textarea class="w-full p-3 border rounded focus:ring-2 focus:ring-blue-400" placeholder="Task Description" bind:value={description}>
 
  </textarea>
@@ -66,9 +65,8 @@
 {/each}
 </select>
 
-  <button class="w-full  text-white py-2 rounded bg-blue-600  hover:bg-blue-700 focus:ring-blue-300" onclick={submit}>
-    Add Task 
+  <button class="w-full  text-white py-2 rounded bg-blue-600  hover:bg-blue-700 focus:ring-blue-300 cursor-pointer" onclick={submit}>
+    Add Task
   </button>
-  
-   
+
 </div>

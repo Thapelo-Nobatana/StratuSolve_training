@@ -1,82 +1,82 @@
 // @ts-nocheck
-import { userValues } from "$lib/stores/auth.svelte";
+
 const API_URL = 'http://localhost:8100';
-
-
-
 
 // GET TASKS
 export async function fetchTasks() {
-  try{
-    const res = await fetch(`${API_URL}/tasks`,{
-      headers: { 'Content-Type': 'application/json' ,'Authorization':userValues.userId},
-  });
-  return await res.json();
-
-  }
-  catch{
-    console.error({err: "Maybe not logged in ? or authed"})
-    return []
-  }
+	try {
+		const res = await fetch(`${API_URL}/tasks`, {
+			headers: { 'Content-Type': 'application/json' },
+			credentials: 'include'
+		});
+		return await res.json();
+	} catch {
+		console.error({ err: 'Maybe not logged in ? or authed' });
+		return [];
+	}
 }
 
 // POST TASKS
 export async function createTask(task) {
-  if (!userValues.userId)
-    return
-  try{
-
-    const res = await fetch(`${API_URL}/tasks`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' ,'Authorization':userValues.userId},
-      body: JSON.stringify(task)
-    });
-    console.log("res: ",res)
-    return await res.json();
-
-  }
-  catch{
-    console.log("An err occured",userValues) ;
-   return {err:"something wrong"} 
-  }
+	try {
+		const res = await fetch(`${API_URL}/tasks`, {
+			method: 'POST',
+			headers: { 'Content-Type': 'application/json' },
+			credentials: 'include',
+			body: JSON.stringify(task)
+		});
+		console.log('res: ', res);
+		return await res.json();
+	} catch {
+		console.log('An err occured');
+		return { err: 'something wrong' };
+	}
 }
-
-
 
 // UPDATE TASKS
 export async function updateTask(data) {
-  if(!userValues.userId){
-    return
-  }
-  const res = await fetch(`${API_URL}/tasks/${data.id}`, {
-    method: 'PUT',
-    headers: { 'Content-Type': 'application/json','Authorization':userValues.userId},
-    body: JSON.stringify(data)
-  });
-    return await res.json();
+	try {
+		const res = await fetch(`${API_URL}/tasks/${data.id}`, {
+			method: 'PUT',
+			headers: { 'Content-Type': 'application/json' },
+			credentials: 'include',
+			body: JSON.stringify(data)
+		});
+		return await res.json();
+	} catch {
+		console.log('update failed');
+
+		return { err: 'Update failed' };
+	}
 }
-
-
-
 
 // DELETE TASKS
 export async function deleteTask(id) {
-  if(!userValues.userId){
-    return 
-  }
-  try {
-      const res = await fetch(`${API_URL}/tasks/${id}`, {
-    method: 'DELETE',
-    headers: { 'Authorization':userValues.userId},
-    
-  });
-  return await res.json();
+	try {
+		const res = await fetch(`${API_URL}/tasks/${id}`, {
+			method: 'DELETE',
+			credentials: 'include'
+		});
+		return await res.json();
+	} catch {
+		console.log('delete failed');
+		return { err: 'delete failed' };
+	}
+}
 
-  } catch  {
+// Search user by email
 
-    console.log("Error onDelete", userValues);
-    return { err: "error on delete"};
+export async function fetchUserByEmail(email) {
+	try {
+		const res = await fetch(`${API_URL}/tasks/email`, {
+			method: 'POST',
+			credentials: 'include',
+			body: JSON.stringify(email)
+		});
 
-  }
-
+		return await res.json();
+	} catch {
+		console.log('User does not exist');
+		return { error: 'User does not exist' };
+	}
 }
