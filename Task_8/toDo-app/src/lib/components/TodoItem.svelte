@@ -10,7 +10,7 @@
     let title = $derived(task.title);
     let description = $derived(task.description);
     let completed = $derived(task.completed)
-
+    
 
 
     // UPDATE TASK AND SAVE 
@@ -74,7 +74,16 @@
                         {task.description}
                       </p>
                     {/if}
+
+                    {#if task.category}
+                        <span class="px-2 py-1 rounded text-white text-xs" style="background-color: {task.category.color};">
+                           {task.category.name}
+                        </span>
+                        {:else}
+                         <span class="text-grey-500 text-xs">No Category</span>
+                    {/if}
               </div>
+              
          
 
           <div class="flex gap-2">

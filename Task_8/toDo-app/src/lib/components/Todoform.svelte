@@ -7,6 +7,7 @@
     let { update } = $props()
  let title = $state("");
  let description = $state("")
+ let categoryId = $state("");
  let categories = $state([])
 
   onMount( async () => {
@@ -37,11 +38,12 @@
       title: title,
       description: description,
       completed: false,
+      categoryId: categoryId ? +categoryId : null
     })
 
     title = '';
     description = ''
-
+    categoryId = ''
     if (res.id){
       await update() ;
     }
@@ -58,10 +60,10 @@
 
  </textarea>
 
- <select>
-  <option disabled selected>Select a Category</option>
- {#each categories as category}
-  <option value={`bg-${category.color}`}>{category.name}</option>
+ <select class="w-full p-3 border rounded" bind:value={categoryId}>
+  <option disabled value="">Select a Category</option>
+ {#each categories as category (category.id)}
+  <option value={category.id}>{category.name}</option>
 {/each}
 </select>
 

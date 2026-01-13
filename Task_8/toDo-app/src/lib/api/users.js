@@ -7,7 +7,7 @@ export async function fetchAllUsers() {
 			credentials: 'include'
 		});
 
-		let data = res.json();
+		let data = await res.json();
 
 		console.log('got all the users data:', data);
 		return data;

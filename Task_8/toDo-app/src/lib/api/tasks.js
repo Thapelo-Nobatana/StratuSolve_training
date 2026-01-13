@@ -9,6 +9,8 @@ export async function fetchTasks() {
 			headers: { 'Content-Type': 'application/json' },
 			credentials: 'include'
 		});
+
+		// console.log('where are you:', await res.json());
 		return await res.json();
 	} catch {
 		console.error({ err: 'Maybe not logged in ? or authed' });
@@ -78,5 +80,20 @@ export async function fetchUserByEmail(email) {
 	} catch {
 		console.log('User does not exist');
 		return { error: 'User does not exist' };
+	}
+}
+
+// Admin fetch all tasks and user_id
+
+export async function adminFetchAllTask() {
+	try {
+		const res = await fetch(`${API_URL}/admin/tasks`, {
+			method: 'GET',
+			credentials: 'include'
+		});
+
+		return await res.json();
+	} catch (err) {
+		console.log('could not fetch:', err);
 	}
 }

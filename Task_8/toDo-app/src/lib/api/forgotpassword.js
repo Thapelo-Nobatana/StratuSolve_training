@@ -46,21 +46,26 @@ export async function sendResetEmail(email) {
 
 // Reset Password
 
-export async function resetPassword(email, token, password) {
+export async function resetPassword(token, password) {
 	try {
 		let res = await fetch(`${API_URL}/auth/reset-password`, {
 			method: 'POST',
 			headers: { 'Content-Type': 'application/json' },
-			body: JSON.stringify({ email, token, password })
+			body: JSON.stringify({ token, password })
 		});
 
-		if (res.ok) {
-			console.log('Password updated');
+		if (!res.ok) {
+			const error = await res.json();
+			console.error('Failed to reset Password:', error);
 		}
+
+		// const data = await res.json();
+
+		console.log('Password updated successfully:');
 
 		return true;
 	} catch (err) {
-		console.error('failed to update password', err);
+		console.error('Failed to update password', err);
 		return false;
 	}
 }

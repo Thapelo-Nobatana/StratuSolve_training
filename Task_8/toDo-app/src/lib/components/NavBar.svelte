@@ -25,7 +25,7 @@
 
 
 {#if $user}
-   <nav class="bg-orange-300 text-white px-4 py-3 flex p-8 justify-between">
+   <nav class="bg-gray-800 text-white px-4 py-3 flex p-8 justify-between">
      <div class="flex items-center gap-2">
          {#if $user?.role === 'admin'}
          <div class="flex items-center gap-4">

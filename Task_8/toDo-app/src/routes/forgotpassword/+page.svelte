@@ -2,10 +2,12 @@
 // @ts-nocheck
    import Swal from "sweetalert2";
    import { page } from "$app/stores";
+  
    import { resetPassword } from "$lib/api/forgotpassword";
+	import { goto } from "$app/navigation";
 
    // input state
-   let email = $state('');
+ 
    let newPassword = $state('');
    let confirm = $state('');
  
@@ -17,7 +19,7 @@
 
 
     // Regex
-    let passwordRegex = /(?=.*?[A-Z]).{4,}$/
+    let passwordRegex = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/
 
    // show password
    let isShow = $state(false);
@@ -27,14 +29,7 @@
 
    async function handleUpdate() {
 
-      // validate email
-    if(email === '') {
-          return Swal.fire({
-            icon: "error",
-            title: "Oops...",
-            text: "Email is required!",
-            });
-    }
+
 
      // validate new Password
      if(newPassword === '') {
@@ -58,7 +53,7 @@
             return  Swal.fire({
             icon: "error",
             title: "Oops...",
-            text: "password must contain at least 4 characters, including a uppercase letter",
+            text: "Password must be at least 8 characters long and include at least one uppercase letter, one lowercase letter, one number, and one special character.",
             });
      }
      if(newPassword !== confirm ) {
@@ -79,24 +74,25 @@
        })
      }
 
-     let success = await resetPassword( email ,token, newPassword)
+     let success = await resetPassword(token, newPassword)
 
      if(!success) {
          errorState = "something went wrong. Please try again.";
         return;
      }
 
-     email = '';
+  
      newPassword = '';
      confirm = ''
       errorState = ''
 
-    return  Swal.fire({
+      Swal.fire({
             icon: "success",
             title: "Success!...",
             text: "Password updated successfully",
             });
 
+     goto('/login')
    }
 </script>
 
@@ -106,7 +102,6 @@
 <div class="max-w-sm mx-auto flex flex-col items-center mt-20 border rounded-lg p-8 gap-4">
     <h1 class="text-xl font-bold">Update Password</h1>
 
-    <input class="w-full p-2 border rounded" type="email" placeholder="Email" bind:value={email}  required/>
     <div class="w-full flex items-center">
       <input class="w-full p-2 border rounded" type={ isShow ? "text": "password"} placeholder="New Password"  title="Must contain at least 4 characters, including a uppercase letter"  autocomplete="new-password" bind:value={newPassword} required/>
       <button  class="ml-[-70px] w-half  p-2 cursor-pointer" onclick={() => isShow = !isShow}>

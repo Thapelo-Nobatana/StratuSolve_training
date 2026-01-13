@@ -14,9 +14,7 @@
 
    // Regex
     let passwordRegex = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/
-
     let emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-   
    // show password
    let isShow = $state(false);
    let isConfim = $state(false);
@@ -45,7 +43,7 @@
         }
 
 
-        // if(!emailRegex.test(email)) return alert("Please include an '@' in the email address")
+         if(!emailRegex.test(email)) return alert("Please include an '@' in the email address")
         // validate password
         if(password === '') {
              return Swal.fire({
@@ -86,7 +84,7 @@
             text: "This email address is already registered. Would you like to log in or reset your password?"
           });
         }
-        // rehydrate session from cookie
+    // rehydrate session from cookie
     await restoreSessions();
 
     // now redirect

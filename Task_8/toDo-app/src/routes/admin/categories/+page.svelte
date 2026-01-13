@@ -86,10 +86,10 @@
             <div class="bg-white w-full  flex flex-col p-6 items-center rounded shadow-lg max-w-md mx-auto mt-10">
                    <h2 class="text-xl font-bold mb-4">Categories</h2>
                    <div class="space-y-5">
-                     <input type="text" placeholder="Categorie name" class="w-full p-2 border" bind:value={name} />
+                     <input type="text" placeholder="Category name" class="w-full p-2 border" bind:value={name} />
                         <input  type="color" placeholder="color" class="w-full p-2 border" bind:value={color}/>
                         <div>
-                        <Button variant="primary" onClick={creatingCategories}>create Category</Button>
+                        <Button variant="primary" onClick={creatingCategories}>Create</Button>
                         </div>
                    </div>
          </div>

@@ -38,7 +38,7 @@
             text: "Email has been Sent, please check your inbox",
             });
 
-    return goto('/login');
+     goto('/login');
    }
 </script>
 
