@@ -8,6 +8,9 @@
    // input state
    let email = $state('');
 
+   // isLoading 
+   let isLoading = $state(false)
+
     //error state
     let errorState = $state('');
 
@@ -22,23 +25,32 @@
             });
     }
 
-     let success = await sendResetEmail(email)
+    isLoading = true;
+    try {
 
-     if(!success) {
+         let success = await sendResetEmail(email)
+
+         if(!success) {
+               errorState = "something went wrong. Please try again.";
+            return;
+         }
+
+         email = '';
+
+
+      Swal.fire({
+                  icon: "success",
+                  title: "Success!...",
+                  text: "Email has been Sent, please check your inbox",
+                  });
+
+         goto('/login');
+
+    } catch {
          errorState = "something went wrong. Please try again.";
-        return;
-     }
-
-     email = '';
-    errorState = ''
-
-  Swal.fire({
-            icon: "success",
-            title: "Success!...",
-            text: "Email has been Sent, please check your inbox",
-            });
-
-     goto('/login');
+    } finally {
+      isLoading = false
+    }
    }
 </script>
 
@@ -52,9 +64,12 @@
 
 
         <p class="text-red-500">{errorState}</p>
-   <button class="bg-blue-600 text-white px-4 py-2 w-full  rounded font-medium transition focus:outline-none focus:ring cursor-pointer" onclick={handleSubmit}>
-
-      Send Email
+   <button class="bg-blue-600 text-white px-4 py-2 w-full  rounded font-medium transition focus:outline-none focus:ring cursor-pointer" onclick={handleSubmit} disabled={isLoading}>
+       {#if isLoading }
+           Sending...
+         {:else}
+            Send Email
+       {/if}
    </button>
 </div>
 

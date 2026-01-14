@@ -44,10 +44,10 @@
       try {
          adminTasks = await adminFetchAllTask();
 
-        console.log("this is tasks for admin to see", adminTasks)
+        // console.log("this is tasks for admin to see", adminTasks)
 
       } catch(err) {
-        console.log("Admin task fetch failed", err);
+        // console.log("Admin task fetch failed", err);
       }
 
     }
@@ -86,7 +86,6 @@
                                       <p> <strong>Task Title</strong> {task.title}</p>
                                       <div class="flex items-center gap-2">
                                               <p><strong>Task Description:</strong> {task.description}</p>
-  
                                       </div>
                                       <div class="flex items-center gap-2">
                                           <strong>Category:</strong>

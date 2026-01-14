@@ -29,12 +29,17 @@
      <div class="flex items-center gap-2">
          {#if $user?.role === 'admin'}
          <div class="flex items-center gap-4">
-             <a href="/profile">
-            <img src={ $user.photo || defaultPhoto} class="w-8 h-8 rounded-full mx-auto" alt="profle" />
+          <div class="flex items-center gap-1">
+             
+              <a href="/profile">
+                <img src={ $user.photo || defaultPhoto} class="w-8 h-8 rounded-full mx-auto" alt="profle" />
               </a>
+              <a href="/profile"><p class="text-white">{$user.username}</p></a>
+          </div>
+
               <div class="flex items-center gap-4">
                 <div class="flex items-center cursor-pointer">
-                   <a href="/admin/categories"><Icon icon="tabler:layout-navbar-expand" width="24" height="24" /></a> 
+                   <a href="/admin/categories"><Icon icon="tabler:layout-navbar-expand" width="24" height="24" /></a>
                    <a href="/admin/categories">Categories</a>
 
                 </div>
@@ -43,10 +48,14 @@
                     <a href="/"><Icon icon="qlementine-icons:user-16" width="22" height="22" /></a>
                      <a href="/admin/users">Users</a>
                   </div>
+                    <div class="flex items-center gap-1 cursor-pointer">
+                    <a href="/"><Icon icon="ic:sharp-task" width="22" height="22" /></a>
+                     <a href="/admin/Tasks">Tasks</a>
+                  </div>
               </div>
          </div>
 
-            <p class="text-white">{$user.username}</p>
+           
 
           {:else}
             <a href="/userProfile">

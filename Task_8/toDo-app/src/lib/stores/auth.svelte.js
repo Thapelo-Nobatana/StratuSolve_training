@@ -24,9 +24,9 @@ export async function restoreSessions() {
 		});
 		const data = await res.json();
 
-		if (res.ok) {
-			user.set(data);
-			userValues = data;
+		if (res.ok && data.user) {
+			user.set(data.user);
+			userValues = data.user;
 		} else {
 			user.set(null);
 			userValues = {};
@@ -87,9 +87,6 @@ export async function login(email, password) {
 
 	if (data.role === 'admin') {
 		goto('/');
-	} else {
-		goto('/');
-		return;
 	}
 
 	console.log('this is the end of api');

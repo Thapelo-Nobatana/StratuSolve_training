@@ -12,7 +12,9 @@
    let confirm = $state('');
  
 
+    // isLoading State
 
+    let isLoading = $state(false);
     //error state
     let errorState = $state('');
 
@@ -73,26 +75,39 @@
          text: "Invalid password reset token.",
        })
      }
+     isLoading = true;
+     errorState = '';
+     try {
 
-     let success = await resetPassword(token, newPassword)
+          let success = await resetPassword(token, newPassword)
 
-     if(!success) {
-         errorState = "something went wrong. Please try again.";
-        return;
+          if(!success) {
+              errorState = "something went wrong. Please try again.";
+              return;
+          }
+
+        
+          newPassword = '';
+          confirm = ''
+            errorState = ''
+
+            Swal.fire({
+                  icon: "success",
+                  title: "Success!...",
+                  text: "Password updated successfully",
+                  });
+
+          goto('/login')
+
+     } catch {
+
+       errorState = "something went wrong. Please try again"
+
+     } finally {
+          isLoading = false;
      }
 
-  
-     newPassword = '';
-     confirm = ''
-      errorState = ''
 
-      Swal.fire({
-            icon: "success",
-            title: "Success!...",
-            text: "Password updated successfully",
-            });
-
-     goto('/login')
    }
 </script>
 
@@ -103,7 +118,7 @@
     <h1 class="text-xl font-bold">Update Password</h1>
 
     <div class="w-full flex items-center">
-      <input class="w-full p-2 border rounded" type={ isShow ? "text": "password"} placeholder="New Password"  title="Must contain at least 4 characters, including a uppercase letter"  autocomplete="new-password" bind:value={newPassword} required/>
+      <input class="w-full p-2 border rounded" type={ isShow ? "text": "password"} placeholder="New Password"  title="Password must be at least 8 characters long and include at least one uppercase letter, one lowercase letter, one number, and one special character."  autocomplete="new-password" bind:value={newPassword} required/>
       <button  class="ml-[-70px] w-half  p-2 cursor-pointer" onclick={() => isShow = !isShow}>
         	{#if isShow}
              <p class="text-black">Hide</p>
@@ -123,9 +138,16 @@
       </button>
     </div>
          <p class="text-red-500">{errorState}</p>
-   <button class="bg-blue-600 text-white px-4 py-2 w-full  rounded font-medium transition focus:outline-none focus:ring cursor-pointer" onclick={handleUpdate}>
-
-      Upadate Password
+   <button class="bg-blue-600 text-white px-4 py-2 w-full  rounded font-medium transition focus:outline-none focus:ring cursor-pointer" onclick={handleUpdate} disabled={isLoading}>
+         {#if isLoading}
+              <span class="flex items-center justify-center gap-2">
+                <span class="animate-spin h-4 w-4 border-2 border-white border-t-transparent rounded-full"></span>
+                Updating...
+              </span>
+            {:else}
+                  Update Password
+         {/if}
+  
    </button>
 </div>
 

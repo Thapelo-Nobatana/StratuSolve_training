@@ -126,7 +126,7 @@
         </div>
 
 
-        {#if completedTasks.length > 0}
+        <!-- {#if completedTasks.length > 0}
             <div class="bg-white w-full flex flex-col gap-2 p-6 items-center rounded shadow-lg max-w-md mx-auto mt-6">
                 <h3 class="text-lg font-bold mb-2">Completed Tasks</h3>
                 <ul class="list-disc list-inside space-y-1">
@@ -147,7 +147,7 @@
             </div>
             {:else}
             <p class="mt-6 ml-72 text-gray-500">No completed tasks yet.</p>
-        {/if}
+        {/if} -->
  </div>
 
 
