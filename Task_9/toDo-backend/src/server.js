@@ -22,20 +22,22 @@ const port = 8100;
 // this function is setting response, statuscode and stringify your data;
 function send(res, status, data) {
   res.statusCode = status;
-  res.setHeader("Content-Type", "application/json");
+  // res.setHeader("Content-Type", "application/json");
   res.end(JSON.stringify(data));
+  return;
 }
 
 // this is the server handler
 
 async function handleClient(req, res) {
-  res.setHeader("Access-Control-Allow-Origin", "http://localhost:5173");
+  res.setHeader("Access-Control-Allow-Origin", `http://${hostName}:5173`);
   res.setHeader(
     "Access-Control-Allow-Methods",
     "GET, POST, PUT, DELETE, OPTIONS"
   );
   res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
   res.setHeader("Access-Control-Allow-Credentials", "true");
+  res.setHeader("Content-Type", "application/json");
 
   //  HANDLE OPTIONS REQUESTS
   if (req.method === "OPTIONS") {
@@ -170,17 +172,20 @@ async function handleClient(req, res) {
   // Get users
   if (req.method === "GET" && req.url === "/admin/users") {
     try {
+      if (!isAdmin(user)) {
+        send(res, 400, { error: " Admin only" });
+        return;
+      }
+
       let users = await User.findAll();
 
       send(res, 200, users);
-      console.log("all users:", users);
+      // console.log("all users:", users);
       return;
     } catch {
       send(res, 400, { error: "Failed to fetch users" });
       return;
     }
-
-    return;
   }
 
   //FORGOT PASSWORD END POINTS
@@ -201,8 +206,8 @@ async function handleClient(req, res) {
       const expires = new Date(Date.now() + 1000 * 60 * 15);
 
       await User.saveResetToken(email, token, expires);
-
-      const resetLink = `http://localhost:5173/forgotpassword?token=${token}`;
+      // TODO
+      const resetLink = `http://${hostName}:5173/forgotpassword?token=${token}`;
 
       const transporter = nodemailer.createTransport({
         service: "gmail",
@@ -229,21 +234,32 @@ async function handleClient(req, res) {
   //Reset Password Endpoint
   if (req.method === "POST" && req.url === "/auth/reset-password") {
     try {
-      const { email, token, password } = await parseBody(req);
-      const user = User.findByResetToken(token);
+      const { token, password } = await parseBody(req);
 
-      if (!user || new Date(user.reset_token_expires < new Date())) {
+      const user = await User.findByResetToken(token);
+
+      if (!user || new Date(user.reset_token_expires) < new Date()) {
         return send(res, 400, { message: "Invalid or expired token" });
       }
 
       const hashedPassword = await bcrypt.hash(password, 10);
-      await User.updatePasswordByEmail(email, hashedPassword);
+
+      const update = await User.updatePasswordByEmail(
+        user.email,
+        hashedPassword
+      );
+
+      if (!update) {
+        return send(res, 500, { message: "Could not update password" });
+      }
 
       await User.clearResetToken(user.id);
 
-      send(res, 200, { message: "Password reset successful" });
-    } catch {
-      send(res, 500, { message: "Could not reset password" });
+      return send(res, 200, { message: "Password reset successful" });
+    } catch (err) {
+      console.error("Reset password error:", err);
+
+      return send(res, 500, { message: "Could not reset password" });
     }
   }
 
@@ -258,7 +274,7 @@ async function handleClient(req, res) {
       const body = await parseBody(req);
 
       // Only allow specific fields to be updated
-      const allowedFields = ["username", "password", "photo"];
+      const allowedFields = ["username", "email", "photo"];
       const updateData = {};
 
       for (let field of allowedFields) {
@@ -282,12 +298,12 @@ async function handleClient(req, res) {
         user: {
           id: updatedUser.id,
           username: updatedUser.username,
+          email: updatedUser.email,
           photo: updatedUser.photo,
-          role: updatedUser.role,
         },
       });
     } catch (err) {
-      console.error("Profile update error:", err);
+      // console.error("Profile update error:", err);
       send(res, 500, { message: "Server error" });
     }
   }
@@ -296,13 +312,15 @@ async function handleClient(req, res) {
 
   // GET TASKS
   if (req.method === "GET" && req.url === "/tasks") {
+    console.log("we should get this:");
     if (!user) {
       send(res, 401, { error: "Not authenticated" });
+      console.log("123");
       return;
     }
 
     const tasks = await Task.loadByUser(user.id);
-
+    console.log("All tasks:", tasks);
     send(res, 200, tasks);
     return;
   }
@@ -353,6 +371,19 @@ async function handleClient(req, res) {
     const id = req.url.split("/")[2];
     await Task.delete(id);
     send(res, 200, { message: "Task deleted" });
+    return;
+  }
+
+  // TASK WITH USER (ADMIN ONLY)
+
+  if (req.method === "GET" && req.url === "/admin/tasks") {
+    if (!isAdmin(user)) {
+      send(res, 400, { message: "Admin only" });
+      return;
+    }
+
+    const tasks = await Task.findAllWithUsers();
+    send(res, 200, tasks);
     return;
   }
 

@@ -38,7 +38,7 @@ class User {
 
   // Update user profile
   static async update(id, data) {
-    const { username, password, photo } = data;
+    const { username, email, photo } = data;
 
     let sql = "UPDATE users SET ";
     const values = [];
@@ -46,10 +46,9 @@ class User {
       sql += "username=?, ";
       values.push(username);
     }
-    if (password) {
-      const hashedPassword = await bcrypt.hash(password, 10);
-      sql += "password=?, ";
-      values.push(hashedPassword);
+    if (email) {
+      sql += "email=?, ";
+      values.push(email);
     }
     if (photo) {
       sql += "photo=?, ";
@@ -115,13 +114,15 @@ class User {
     return rows[0];
   }
 
+  // clear user token after update
+
   static async clearResetToken(id) {
     return db.query(
       "UPDATE users SET reset_token=NULL, reset_token_expires=NULL WHERE id=?",
       [id]
     );
   }
-
+  // Update user Password
   static async updatePasswordByEmail(email, hashedPassword) {
     const sql = `UPDATE users SET password = ? WHERE email= ?`;
     const [result] = await db.query(sql, [hashedPassword, email]);
