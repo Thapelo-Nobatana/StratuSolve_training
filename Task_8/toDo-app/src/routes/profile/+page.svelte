@@ -12,15 +12,11 @@
      // user edit
     let isEditing = $state(false);
     let username = $state('');
-    let email = $state('')
-    let password = $state('');
+    let email = $state('');
     let photo = $state(null);
     let completedTasks = $state([]);
-     
-
 
     onMount( async () => {
-      
        if(!user){
         goto('/login');
        }
@@ -30,7 +26,6 @@
             email = userValues.email
             photo = userValues.photo;
         }
-        
             const allTasks = await fetchTasks(userValues.id)
             console.log("all tasks",allTasks)
             if (allTasks.error ){
@@ -39,9 +34,7 @@
             completedTasks = allTasks.filter(t => t.completed);
 
     });
-    
- 
-    
+
     // load Photo on Profile
     function handlePhoto(e) {
         const file = e.target.files[0];
@@ -55,8 +48,7 @@
 
         reader.readAsDataURL(file)
     }
-  
-    // update the Profile 
+    // update the Profile
 
     async function saveProfile() {
 
@@ -66,7 +58,6 @@
                 const res = await updateProfile(
                            id,
                        username,
-                    password,
                   email,
                     photo
                  );
@@ -75,7 +66,6 @@
            console.log("this is the data for update Profile", data);
            username = '';
             email = '';
-              password = '';
 
            return true
 
@@ -115,7 +105,6 @@
                         <input type="file"  onchange={handlePhoto}/>
                         <input type="text" placeholder=" Username" class="w-full p-2 border" bind:value={username} />
                         <input type="email"  placeholder="Email" class="w-full p-2 border" bind:value={email}/>
-                        <input type="password" placeholder="New Password" class="w-full p-2 border" bind:value={password} />
                         <div class="flex  gap-2">
                         <Button variant="primary" onClick={saveProfile}>Save</Button>
                         <Button variant="secondary" onClick={() => isEditing = false}>Cancel</Button>

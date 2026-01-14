@@ -61,8 +61,6 @@ export async function resetPassword(token, password) {
 
 		// const data = await res.json();
 
-		console.log('Password updated successfully:');
-
 		return true;
 	} catch (err) {
 		console.error('Failed to update password', err);

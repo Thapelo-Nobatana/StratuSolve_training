@@ -26,8 +26,6 @@ let  { update } = $props();
     if (res.id){
       await update() ;
     }
-    else{}
-    //error
  }
 </script>
 

@@ -2,7 +2,8 @@
 // @ts-nocheck
    import { fetchTasks} from '$lib/api/tasks';
    import { adminFetchAllTask } from '$lib/api/tasks';
-
+   import defaultPhoto from '$lib/assets/default.png';
+   import { showConfirmation } from '$lib/utils/alerts';
    import { sessionLoading, user } from '$lib/stores/auth.svelte.js';
    import { goto } from '$app/navigation'
    import {  onMount } from 'svelte';
@@ -72,17 +73,18 @@
           {#each adminTasks as  task (task.id)}
                <li class="bg-gray-300 p-3 rounded" >
                       <div class="flex justify-between items-start">
-                              <div>
-                                <div class="flex items-center gap-2">
+                            <div>
+                                <div class="flex items-center gap-2 mb-2">
+                                    <div>
+                                      <img src={ task.photo ||  defaultPhoto} class="w-8 h-8 rounded-full mx-auto" alt="profle"/>
+                                    </div>
+                                    <div class="flex items-center gap-2">
+                                       <span><strong>User:</strong> {task.username}</span>
+                                     <p> <strong>Email:</strong> {task.email}</p>
+                                    </div>
 
-                                    <span><strong>User:</strong> {task.username}</span>
-                                     <p>
-                                          <strong>Email:</strong> {task.email}
-                                      </p>
 
                                 </div>
-
-
                                       <p> <strong>Task Title</strong> {task.title}</p>
                                       <div class="flex items-center gap-2">
                                               <p><strong>Task Description:</strong> {task.description}</p>
@@ -91,9 +93,11 @@
                                           <strong>Category:</strong>
                                           {#if task.category}
                                            <span class="px-2 py-1 rounded text-white text-xs" style="background-color:{task.category.color};">{task.category.name}</span>
+                                           {:else}
+                                              <p>None</p>
                                           {/if}
                                       </div>
-                              </div>
+                            </div>
 
                           <div class="flex flex-col gap-2">
                                 <button class="text-red-500 cursor-pointer" onclick={() => handleDelete(task.id)}>Delete</button>

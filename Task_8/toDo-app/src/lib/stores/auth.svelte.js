@@ -89,22 +89,25 @@ export async function login(email, password) {
 		goto('/');
 	}
 
+	goto('/');
+
 	console.log('this is the end of api');
 	return true;
 }
 
 // UPDATE PROFILE
-export async function updateProfile(username, password, email, photo) {
-	const res = await fetch(`${API_URL}/auth/update/`, {
+export async function updateProfile(username, email, photo) {
+	const res = await fetch(`${API_URL}/auth/update`, {
 		method: 'PUT',
 		headers: { 'Content-Type': 'application/json' },
 		credentials: 'include',
-		body: JSON.stringify({ username, email, password, photo })
+		body: JSON.stringify({ username, email, photo })
 	});
 
 	const dataResponse = await res.json();
 
 	console.log('this is data from updateProfile:', dataResponse);
+	return dataResponse;
 }
 
 // Logout

@@ -7,11 +7,6 @@
 
 
 
-       // view user's Tasks 
-    async function veiwTask() {
-
-
-    }
 
 
    // DELETE USER
