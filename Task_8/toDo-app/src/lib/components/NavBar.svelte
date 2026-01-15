@@ -15,22 +15,18 @@
       if(!success) {
             console.log("this is after logout:")
       }
-      
-
    }
 </script>
 
 
-
-
-
 {#if $user}
+    <!-- Loggedin nav -->
    <nav class="bg-gray-800 text-white px-4 py-3 flex p-8 justify-between">
      <div class="flex items-center gap-2">
          {#if $user?.role === 'admin'}
+             <!-- admin  -->
          <div class="flex items-center gap-4">
           <div class="flex items-center gap-1">
-             
               <a href="/profile">
                 <img src={ $user.photo || defaultPhoto} class="w-8 h-8 rounded-full mx-auto" alt="profle" />
               </a>
@@ -54,11 +50,10 @@
                   </div>
               </div>
          </div>
-
-           
-
           {:else}
-            <a href="/userProfile">
+
+         <!-- user -->
+          <a href="/userProfile">
               <img src={$user.photo || defaultPhoto} class="w-8 h-8 rounded-full mx-auto" alt="userProfile" />
             </a>
 
@@ -66,11 +61,11 @@
          {/if}
 
      </div>
-
      <button class="cursor-pointer" onclick={loggingOut}>Logout</button>
    </nav>
 
    {:else}
+   <!-- Loggedout nav -->
    <nav class="bg-gray-800 text-white px-4 py-3 flex justify-between">
    <span class="font-bold">TodoApp</span>
 

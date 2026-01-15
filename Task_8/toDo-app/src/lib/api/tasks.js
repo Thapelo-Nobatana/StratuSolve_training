@@ -70,10 +70,11 @@ export async function deleteTask(id) {
 
 export async function fetchUserByEmail(email) {
 	try {
-		const res = await fetch(`${API_URL}/tasks/email`, {
+		const res = await fetch(`${API_URL}/admin/email`, {
 			method: 'POST',
 			credentials: 'include',
-			body: JSON.stringify(email)
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify({ email })
 		});
 
 		return await res.json();

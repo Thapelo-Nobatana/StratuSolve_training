@@ -1,3 +1,4 @@
+// @ts-nocheck
 const API_URL = 'http://localhost:8100';
 
 // GET all users
@@ -14,5 +15,22 @@ export async function fetchAllUsers() {
 	} catch {
 		console.log('something went wrong');
 		return;
+	}
+}
+
+// Delete user
+
+export async function deleteUser(id) {
+	try {
+		let res = await fetch(`${API_URL}/admin/delete/${id}`, {
+			method: 'DELETE',
+			credentials: 'include'
+		});
+
+		if (res.ok) {
+			console.log('user deleted');
+		}
+	} catch (error) {
+		console.error('failed to Delete user:', error);
 	}
 }

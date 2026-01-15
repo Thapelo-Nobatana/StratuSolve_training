@@ -84,7 +84,7 @@
  <div class="space-y-4 flex flex-col items-center">
         <div class="flex w-full items-center p-8 gap-1">
             <div class="self-start">
-                <a href="/" class=" hove:font-bold ">BACK</a>
+                <a href="/" class=" cursor-poiner hove:font-bold ">BACK</a>
             </div>
 
             <div class="bg-white w-full  flex flex-col p-6 items-center rounded shadow-lg max-w-md mx-auto mt-10">

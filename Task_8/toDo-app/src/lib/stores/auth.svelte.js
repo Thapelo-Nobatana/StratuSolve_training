@@ -12,8 +12,8 @@ export const user = writable(null);
 export let userValues = {};
 export const sessionLoading = writable(true);
 let didLogout = false;
-// session rehydration
 
+// session rehydration
 export async function restoreSessions() {
 	if (!browser || didLogout) return;
 	sessionLoading.set(true);
@@ -40,7 +40,6 @@ export async function restoreSessions() {
 }
 
 //Signup
-
 export async function signup(email, username, password) {
 	const res = await fetch(`${API_URL}/auth/signup`, {
 		method: 'POST',
@@ -65,7 +64,6 @@ export async function signup(email, username, password) {
 }
 
 //Login
-
 export async function login(email, password) {
 	const res = await fetch(`${API_URL}/auth/login`, {
 		method: 'POST',
@@ -111,7 +109,6 @@ export async function updateProfile(username, email, photo) {
 }
 
 // Logout
-
 export async function logout() {
 	console.log('this is vmy logout:');
 	try {

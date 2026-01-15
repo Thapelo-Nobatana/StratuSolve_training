@@ -31,7 +31,6 @@
   icon: "error",
   title: "Oops...",
   text: "Title is required!",
- 
 });
    // creating a tasking
     const res = await createTask({
@@ -47,9 +46,6 @@
     if (res.id){
       await update() ;
     }
-    else{}
-    //error
-   
  }
 </script>
 

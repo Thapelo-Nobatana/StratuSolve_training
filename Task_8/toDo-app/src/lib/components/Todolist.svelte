@@ -2,13 +2,8 @@
 	import TodoItem from "./TodoItem.svelte";
 
 // @ts-nocheck
-
-    let { tasks, refresh } = $props();
-   
-
+  let { tasks, refresh } = $props();
 </script>
-
-
 
 <ul class="space-y-2 ">
   {#each tasks as  task}

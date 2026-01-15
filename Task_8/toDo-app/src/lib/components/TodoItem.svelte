@@ -1,19 +1,15 @@
 <script>
-	
-
 // @ts-nocheck
     import { updateTask, deleteTask } from "$lib/api/tasks";
     import { showConfirmation } from "$lib/utils/alerts";
     let { task,refresh} = $props();
-     
+     // state
     let isEditing = $state(false);
     let title = $derived(task.title);
     let description = $derived(task.description);
     let completed = $derived(task.completed)
-    
 
-
-    // UPDATE TASK AND SAVE 
+    // UPDATE TASK AND SAVE
     async function save() {
 
        const data = await updateTask({
@@ -62,7 +58,6 @@
      </div>
      {:else}
        <div class="flex justify-between items-start">
-         
               <div>
                 <div class="flex items-center gap-2">
                     <input type="checkbox" checked={task.completed} onchange={onToggle}/>
@@ -83,14 +78,11 @@
                          <span class="text-grey-500 text-xs">No Category</span>
                     {/if}
               </div>
-              
-         
 
           <div class="flex gap-2">
                 <button class="text-blue-500 cursor-pointer" onclick={() => isEditing = true}>Edit</button>
                 <button class="text-red-500 cursor-pointer" onclick={() => handleDelete(task.id)}>Delete</button>
           </div>
-      
        </div>
     {/if}
    <!-- </a> -->
