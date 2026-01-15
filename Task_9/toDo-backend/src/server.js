@@ -373,6 +373,7 @@ async function handleClient(req, res) {
     send(res, 200, { message: "Task deleted" });
     return;
   }
+  //(ADMIN ONLY)
 
   // TASK WITH USER (ADMIN ONLY)
 
@@ -385,6 +386,42 @@ async function handleClient(req, res) {
     const tasks = await Task.findAllWithUsers();
     send(res, 200, tasks);
     return;
+  }
+
+  // SEARCH USER BY EMAIL
+
+  if (req.method === "POST" && req.url === "/admin/email") {
+    if (!isAdmin(user)) {
+      send(res, 400, { message: "Admin only" });
+      return;
+    }
+    try {
+      let body = await parseBody(req);
+      let userEmail = body.email;
+
+      const foundEmail = await User.findByEmail(userEmail);
+
+      send(res, 200, foundEmail);
+      return;
+    } catch (err) {
+      console.error("Search user error:", err);
+      return send(res, 500, { message: "server Error" });
+    }
+  }
+
+  // DELETE USER (ADMIN ONLY)
+
+  if (req.method === "DELETE" && req.url.startsWith("/admin/delete/")) {
+    if (!isAdmin(user)) {
+      send(res, 400, { message: "Admin only" });
+      return;
+    }
+
+    const id = req.url.split("/")[3];
+
+    await User.delete(id);
+
+    send(res, 200, { message: "User deleted" });
   }
 
   // CATEGORY ROUTES (ADMIN ONLY)

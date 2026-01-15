@@ -30,7 +30,8 @@ class User {
 
   // Find a user by email
   static async findByEmail(email) {
-    const [rows] = await db.query("SELECT * FROM users WHERE email = ?", [
+    if (!email) throw new Error("Email is required");
+    const [rows] = await db.query("SELECT * FROM users WHERE email =?", [
       email,
     ]);
     return rows[0];
