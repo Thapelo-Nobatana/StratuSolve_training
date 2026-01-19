@@ -1,9 +1,7 @@
 <script>
     // @ts-nocheck
     import { fetchTasks } from '$lib/api/tasks';
-   
 	import Button from '$lib/components/Button.svelte';
-   
     import {  user,userValues, updateProfile } from '$lib/stores/auth.svelte.js'
      import defaultPhoto from '$lib/assets/default.png';
     import { onMount } from 'svelte';
@@ -14,7 +12,7 @@
     let username = $state('');
     let email = $state('');
     let photo = $state(null);
-    let completedTasks = $state([]);
+    // let completedTasks = $state([]);
 
     onMount( async () => {
        if(!user){
@@ -31,7 +29,7 @@
             if (allTasks.error ){
                 goto('/login')
             }
-            completedTasks = allTasks.filter(t => t.completed);
+            // completedTasks = allTasks.filter(t => t.completed);
 
     });
 
@@ -48,36 +46,59 @@
 
         reader.readAsDataURL(file)
     }
+
+//     function handlePhoto(e) {
+//     const file = e.target.files[0];
+//     if (!file) return;
+//     photo = file; 
+// }
     // update the Profile
 
+    // async function saveProfile() {
+
+    //     try {
+    //              const id = userValues.id
+
+    //    const res = await updateProfile(
+    //                        id,
+    //                    username,
+    //               email,
+    //                 photo
+    //              );
+
+    //     const data = await res.json();
+    //        console.log("this is the data for update Profile", data);
+    //        username = '';
+    //         email = '';
+
+    //        return true
+
+    //     } catch (error) {
+
+    //           console.log("update error:", error)
+    //     } finally {
+
+    //                isEditing = false;
+    //     }
+    // }
     async function saveProfile() {
+    try {
+        const data = await updateProfile(username, email, photo); 
 
-        try {
-                 const id = userValues.id
+        console.log("this is the data for update Profile", data);
 
-                const res = await updateProfile(
-                           id,
-                       username,
-                  email,
-                    photo
-                 );
+        
+        userValues.username = data.user.username;
+        userValues.email = data.user.email;
+        userValues.photo = data.user.photo;
 
-        const data = await res.json();
-           console.log("this is the data for update Profile", data);
-           username = '';
-            email = '';
-
-           return true
-
-        } catch (error) {
-
-              console.log("update error:", error)
-        } finally {
-
-                   isEditing = false;
-        }
+    } catch (error) {
+        console.log("update error:", error);
+    } finally {
+        isEditing = false;
     }
-
+}
+ console.log("user info:",userValues)
 
 </script>
  {#if userValues}
@@ -101,10 +122,10 @@
                     </div>
                     {:else}
                     <div class="space-y-4">
-                        <img src={  photo || defaultPhoto} class="w-24 h-24 rounded-full mx-auto" alt="profile"/>
+                        <img src={ userValues.photo || defaultPhoto} class="w-24 h-24 rounded-full mx-auto" alt="profile"/>
                         <input type="file"  onchange={handlePhoto}/>
-                        <input type="text" placeholder=" Username" class="w-full p-2 border" bind:value={username} />
-                        <input type="email"  placeholder="Email" class="w-full p-2 border" bind:value={email}/>
+                        <input type="text" placeholder={userValues.username} class="w-full p-2 border" bind:value={userValues.username} />
+                        <input type="email"  placeholder={userValues.email || "email"} class="w-full p-2 border" bind:value={userValues.email}/>
                         <div class="flex  gap-2">
                         <Button variant="primary" onClick={saveProfile}>Save</Button>
                         <Button variant="secondary" onClick={() => isEditing = false}>Cancel</Button>

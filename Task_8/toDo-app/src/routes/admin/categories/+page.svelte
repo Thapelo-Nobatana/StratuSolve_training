@@ -17,7 +17,7 @@
     let categories = $state([]);
      // input values state
     let name = $state('');
-    let color = $state('');
+    let color = $state("#000000");
 
 
 
@@ -50,7 +50,7 @@
             color: color
         })
         console.log("admin action",res) ;
-
+        name = ""
         if (res.message && res.message.includes("created")){
             await handleGetCategories() ;
         }
@@ -87,7 +87,9 @@
                    <h2 class="text-xl font-bold mb-4">Categories</h2>
                    <div class="space-y-5">
                      <input type="text" placeholder="Category name" class="w-full p-2 border" bind:value={name} />
-                        <input  type="color" placeholder="color" class="w-full p-2 border" bind:value={color}/>
+                        <div class="flex items-center gap-1" for="color">
+                           Select color: <input  type="color" id="color" placeholder="color" class="w-1/2  border" bind:value={color}/>
+                        </div>
                         <div>
                         <Button variant="primary" onClick={creatingCategories}>Create</Button>
                         </div>

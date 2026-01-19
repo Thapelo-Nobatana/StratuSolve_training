@@ -12,9 +12,27 @@
    import { restoreSessions } from '$lib/stores/auth.svelte.js';
    import { get } from 'svelte/store';
 
-      let tasks = $state([])
+      // list for tasks
+      let tasks = $state([]);
+      // list for users
       let allUsers = $state([]);
+      // list for admin
       let adminTasks = $state([]);
+
+      // Pagination
+      let currentTask = $state(5);
+      let pageSize = 5;
+
+        //   let paginationAdminTasks = $derived(() => {
+        //   const start = (currentPage - 1) * pageSize;
+        //   const end = start + pageSize;
+        //       return adminTasks.slice(start, end);
+
+        // });
+
+      // total number of pages
+      let totalPages = $derived(() => Math.max(1, Math.ceil(adminTasks.length / pageSize)));
+
      onMount( async () => {
        await restoreSessions();
 
@@ -38,20 +56,26 @@
     }
 
 
-
     // get all users and their tasks (Admin only)
 
     async function refreshAdminTasks() {
       try {
-         adminTasks = await adminFetchAllTask();
+         const res = await adminFetchAllTask(currentTask);
 
-        // console.log("this is tasks for admin to see", adminTasks)
+         adminTasks = res.task ?? res ?? [];
+        console.log("this is tasks for admin to see", adminTasks)
 
       } catch(err) {
         // console.log("Admin task fetch failed", err);
       }
 
     }
+   console.log("this is admin tasks:", adminTasks);
+    $effect(() => {
+  if (get(user)?.role === 'admin') {
+    refreshAdminTasks();
+  }
+});
 
    // DELETE USER
   async function handleDelete(id) {
@@ -70,6 +94,7 @@
         <h1 class="text-2xl font-bold mb-4 text-center">All Tasks List</h1>
 
          <ul class="space-y-2 ">
+          <!-- <p>Admin tasks count: { adminTasks.length}</p> -->
           {#each adminTasks as  task (task.id)}
                <li class="bg-gray-300 p-3 rounded" >
                       <div class="flex justify-between items-start">
@@ -100,7 +125,7 @@
                             </div>
 
                           <div class="flex flex-col gap-2">
-                                <button class="text-red-500 cursor-pointer" onclick={() => handleDelete(task.id)}>Delete</button>
+                                <!-- <button class="text-red-500 cursor-pointer" onclick={() => handleDelete(task.id)}>Delete</button> -->
                           </div>
                       </div>
 
@@ -108,6 +133,16 @@
 
           {/each}
         </ul>
+         <div class="flex justify-center items-center gap-2 mt-4">
+            <!-- <button class="px-3 py-1 rounded bg-grey-200 disabled:opacity-50 cursor-pointer" disabled={currentTask === 1} onclick={() => currentTask--}>
+              Delete
+            </button> -->
+
+            <!-- <span class="text-sm">Tasks { currentTask } of {adminTasks.length}</span> -->
+            <button class="px-3 py-1 rounded bg-grey-200 disabled:opacity-50" disabled={currentTask === totalPages} onclick={() => currentTask += 5}>
+              Load More
+            </button>
+         </div>
       </div>
     </div>
   {:else}
@@ -117,6 +152,7 @@
         <Todoform  update={refreshTasks}/>
 
         <Todolist tasks={tasks}  refresh={refreshTasks} />
+
       </div>
     </div>
 

@@ -29,7 +29,7 @@ async function handleDelete(id) {
                       <p class="text-sm text-gray-600">User-Role: {user.role}</p>
               </div>
           <div class="flex flex-col gap-2">
-                <button class="text-red-500 cursor-pointer" onclick={() => handleDelete(user.id)}>Delete User</button>
+                <!-- <button class="text-red-500 cursor-pointer" onclick={() => handleDelete(user.id)}>Delete User</button> -->
           </div>
        </div>
 </li>

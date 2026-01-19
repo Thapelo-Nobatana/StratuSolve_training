@@ -41,7 +41,6 @@ export async function deleteCategory(id) {
 	try {
 		let res = await fetch(`${API_URL}/categories/${id}`, {
 			method: 'DELETE',
-			headers: { 'Content-Type': 'application/json' },
 			credentials: 'include'
 		});
 		return await res.json();

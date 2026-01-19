@@ -26,6 +26,7 @@ export async function restoreSessions() {
 
 		if (res.ok && data.user) {
 			user.set(data.user);
+			console.log(data);
 			userValues = data.user;
 		} else {
 			user.set(null);
@@ -94,23 +95,55 @@ export async function login(email, password) {
 }
 
 // UPDATE PROFILE
+// export async function updateProfile(username, email, photo) {
+// 	const res = await fetch(`${API_URL}/auth/update`, {
+// 		method: 'PUT',
+// 		headers: { 'Content-Type': 'application/json' },
+// 		credentials: 'include',
+// 		body: JSON.stringify({ username, email, photo })
+// 	});
+
+// 	const dataResponse = await res.json();
+
+// 	console.log('this is data from updateProfile:', dataResponse);
+// 	return dataResponse;
+// }
+
 export async function updateProfile(username, email, photo) {
 	const res = await fetch(`${API_URL}/auth/update`, {
 		method: 'PUT',
-		headers: { 'Content-Type': 'application/json' },
+		headers: {
+			'Content-Type': 'application/json'
+		},
 		credentials: 'include',
 		body: JSON.stringify({ username, email, photo })
 	});
-
-	const dataResponse = await res.json();
-
-	console.log('this is data from updateProfile:', dataResponse);
-	return dataResponse;
+	console.log(photo);
+	const data = await res.json();
+	return data;
 }
+
+// export async function updateProfile(username, email, photo) {
+// 	const formData = new FormData();
+// 	formData.append('username', username);
+// 	formData.append('email', email);
+
+// 	if (photo instanceof File) {
+// 		formData.append('photo', photo);
+// 	}
+
+// 	const res = await fetch(`${API_URL}/auth/update`, {
+// 		method: 'PUT',
+// 		body: formData,
+// 		credentials: 'include'
+// 	});
+
+// 	return res.json();
+// }
 
 // Logout
 export async function logout() {
-	console.log('this is vmy logout:');
+	// console.log('this is vmy logout:');
 	try {
 		didLogout = true;
 		let res = await fetch(`${API_URL}/auth/logout`, {

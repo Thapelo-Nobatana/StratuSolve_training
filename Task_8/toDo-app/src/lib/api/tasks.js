@@ -86,11 +86,13 @@ export async function fetchUserByEmail(email) {
 
 // Admin fetch all tasks and user_id
 
-export async function adminFetchAllTask() {
+export async function adminFetchAllTask(num) {
 	try {
 		const res = await fetch(`${API_URL}/admin/tasks`, {
-			method: 'GET',
-			credentials: 'include'
+			method: 'POST',
+			credentials: 'include',
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify({ num })
 		});
 
 		return await res.json();

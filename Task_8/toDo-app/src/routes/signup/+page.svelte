@@ -42,8 +42,16 @@
                 });
         }
 
+          
+         if(!emailRegex.test(email)) {
 
-         if(!emailRegex.test(email)) return alert("Please include an '@' in the email address")
+                return Swal.fire({
+                icon: "error",
+                title: "Oops....",
+                text: "Please include an '@' in the email address"
+              });
+
+         } 
         // validate password
         if(password === '') {
              return Swal.fire({
@@ -98,7 +106,7 @@
     <input class="w-full p-2 border rounded" type="text" placeholder="Username" bind:value={username}  required/>
     <input class="w-full p-2 border rounded" type="email" placeholder="Email" bind:value={email}  required/>
     <div class="w-full flex items-center">
-      <input class="w-full p-2 border rounded" type={ isShow ? "text": "password"} placeholder="Password"  title="Must contain at least 4 characters, including a uppercase letter"  autocomplete="new-password" bind:value={password} required/>
+      <input class="w-full p-2 border rounded" type={ isShow ? "text": "password"} placeholder="Password"  title="Password must be at least 8 characters long and include at least one uppercase letter, one lowercase letter, one number, and one special character."  autocomplete="new-password" bind:value={password} required/>
       <button  class="ml-[-70px] w-half  p-2 cursor-pointer" onclick={() => isShow = !isShow}>
         	{#if isShow}
              <p class="text-black">Hide</p>

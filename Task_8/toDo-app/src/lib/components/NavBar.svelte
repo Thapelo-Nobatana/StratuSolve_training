@@ -16,9 +16,11 @@
             console.log("this is after logout:")
       }
    }
+
+   console.log("user info:", $user);
 </script>
 
-
+  
 {#if $user}
     <!-- Loggedin nav -->
    <nav class="bg-gray-800 text-white px-4 py-3 flex p-8 justify-between">
@@ -53,7 +55,7 @@
           {:else}
 
          <!-- user -->
-          <a href="/userProfile">
+          <a href="/profile">
               <img src={$user.photo || defaultPhoto} class="w-8 h-8 rounded-full mx-auto" alt="userProfile" />
             </a>
 

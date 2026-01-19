@@ -1,11 +1,17 @@
 // @ts-nocheck
+
+import { json } from '@sveltejs/kit';
+
 const API_URL = 'http://localhost:8100';
 
 // GET all users
-export async function fetchAllUsers() {
+export async function fetchAllUsers(num) {
 	try {
 		let res = await fetch(`${API_URL}/admin/users`, {
-			credentials: 'include'
+			method: 'POST',
+			headers: { 'Content-Type': 'application/json' },
+			credentials: 'include',
+			body: JSON.stringify({ num })
 		});
 
 		let data = await res.json();

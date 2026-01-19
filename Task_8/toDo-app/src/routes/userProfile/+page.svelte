@@ -13,7 +13,7 @@
     let password = $state('');
     let photo = $state(null);
     let completedTasks = $state([]);
-
+    
 
 
      // load Photo on Profile
@@ -32,17 +32,34 @@
 
 
         // update the Profile 
-    async function saveProfile() {
+    // async function saveProfile() {
 
-      const res = await updateProfile({
-            username,
-            email,
-            password,
-            photo
-        });
+    //   const res = await updateProfile({
+    //         username,
+    //         email,
+    //         password,
+    //         photo
+    //     });
 
-        const data = await res.json()
+    //     const data = await res.json()
+    // }
+        async function saveProfile() {
+                try {
+                    const data = await updateProfile(username, email, photo); 
+
+                    console.log("this is the data for update Profile", data);
+
+                    
+                    userValues.username = data.user.username;
+                    userValues.email = data.user.email;
+                    userValues.photo = data.user.photo;
+
+                } catch (error) {
+                    console.log("update error:", error);
+                } finally {
+                    isEditing = false;
     }
+}
 </script>
     <div class="flex flex-col items-center gap-2 p-6">
         <div  class="self-start ">
@@ -70,7 +87,7 @@
                                 <input type="file"  onchange={handlePhoto}/>
                                 <input type="text" placeholder=" Username" class="w-full p-2 border" bind:value={username} />
                                 <input type="email"  placeholder="Email" class="w-full p-2 border" bind:value={email}/>
-                                <input type="password" placeholder="New Password" class="w-full p-2 border" bind:value={password} />
+                                <!-- <input type="password" placeholder="New Password" class="w-full p-2 border" bind:value={password} /> -->
                                 <div class="flex  gap-2">
                                 <button class="px-4 py-2 w-full  rounded font-medium transition focus:outline-none focus:ring cursor-pointer bg-blue-600 text-white hover:bg-blue-700 focus:ring-blue-300 cursor-pointer" onClick={saveProfile}>Save</button>
                                 <Button variant="secondary" onClick={() => isEditing = false}>Cancel</Button>

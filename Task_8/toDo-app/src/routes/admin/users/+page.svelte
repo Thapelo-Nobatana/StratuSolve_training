@@ -14,6 +14,9 @@ import Userform from "$lib/components/Userform.svelte";
       let allUsers = $state([]);
       let searchedUser = $state(null);
       let isLoading = $state(false);
+      // pagination
+      let currentUsers = $state(5);
+      
 
      onMount( async () => {
 
@@ -28,7 +31,7 @@ import Userform from "$lib/components/Userform.svelte";
 
     async function refreshAllUsers(){
         isLoading = true
-      allUsers = await fetchAllUsers()
+      allUsers = await fetchAllUsers(currentUsers)
 
       isLoading = false
     }
@@ -71,6 +74,17 @@ import Userform from "$lib/components/Userform.svelte";
     {:else}
 
       <Userlist users={allUsers} refresh={refreshAllUsers} />
+            <div class="flex justify-center items-center gap-2 mt-4">
+            <!-- <button class="px-3 py-1 rounded bg-grey-200 disabled:opacity-50 cursor-pointer" disabled={currentTask === 1} onclick={() => currentTask--}>
+              Delete
+            </button> -->
+
+            <!-- <span class="text-sm">Tasks { currentTask } of {adminTasks.length}</span> -->
+            <button class="px-3 py-1 rounded bg-grey-200 disabled:opacity-50"  onclick={ async () => {currentUsers += 5
+               await refreshAllUsers()} }>
+              Load More
+            </button>
+         </div>
     {/if}
   </div>
 </div>
