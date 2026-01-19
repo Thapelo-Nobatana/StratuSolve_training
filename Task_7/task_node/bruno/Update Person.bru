@@ -1,0 +1,25 @@
+meta {
+  name: Update Person
+  type: http
+  seq: 3
+}
+
+put {
+  url: http://localhost:8100/people/2
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "dateOfBirth": "1998-01-20",
+    "surname": "Nobatalo",
+    "age": 20
+  }
+  
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

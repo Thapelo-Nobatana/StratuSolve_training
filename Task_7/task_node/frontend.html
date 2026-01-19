@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Person Table</title>
+
+  <style>
+    body {
+      
+      margin: 30px;
+    }
+
+    .container {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .child-container {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+
+
+    input {
+      margin-bottom: 10px;
+      padding: 5px;
+      width: 250px;
+    }
+    .button-container {
+      display: flex;
+      gap: 10px;
+    }
+
+
+    button {
+      margin: 5px;
+      padding: 8px 12px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: aqua;
+    }
+
+
+    table {
+      margin-top: 20px;
+      border-collapse: collapse;
+      width: 100%;
+    }
+
+    th, td {
+      border: 1px solid #ccc;
+      padding: 8px;
+      text-align: left;
+    }
+
+    tr:hover {
+      background-color: #f2f2f2;
+      cursor: pointer;
+    }
+
+    h1, h3 {
+      margin-top: 20px;
+    }
+
+    p {
+      background: #f8f8f8;
+      padding: 10px;
+      margin-top: 20px;
+      overflow: auto;
+    }
+  </style>
+</head>
+
+<body>
+
+  <h1>Person Application</h1>
+
+  <h3>Person Details</h3>
+
+
+  <div class="container">
+    <div class="upper-div"> </div>
+    <div class="bottom-div"></div>
+       <div class="child-container">
+         <label>ID (for update or delete)</label>
+         <input id="personId" type="number" placeholder="Person ID" min="0"/>
+      </div>   
+      <div class="child-container">
+         <label>First Name</label>
+         <input id="firstName" type="text" placeholder="First Name" />
+      </div>
+      <div class="child-container">
+         <label>Surname</label>
+         <input id="surname" type="text" placeholder="Surname" />
+      </div>
+      <div class="child-container">
+         <label>Date of Birth</label>
+         <input id="dateOfBirth" type="date" placeholder="First Name" />
+      </div>
+       <div class="child-container">
+         <label>Email</label>
+         <input id="email" type="email" placeholder="Email" />
+      </div>
+       <div class="child-container">
+         <label>Age</label>
+         <input id="age" type="number" placeholder="Age" />
+      </div>
+  </div>
+   <div class="button-container">
+     <button onclick="createPerson()">Create Person</button>
+    <button onclick="updatePerson()">Update Person</button>
+    <button onclick="deletePerson()">Delete Person</button>
+    <button onclick="loadAll()">Load All People</button>
+    <button onclick="deleteAll()">Delete All People</button>
+   </div>
+
+
+
+  <h3>People Table</h3>
+
+  <table>
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>First Name</th>
+        <th>Surname</th>
+        <th>Date of Birth</th>
+        <th>Email</th>
+        <th>Age</th>
+      </tr>
+    </thead>
+    <tbody id="peopleTableBody">
+      
+    </tbody>
+  </table>
+
+
+
+  <script src="./app.js"></script>
+</body>
+</html>

@@ -1,0 +1,26 @@
+meta {
+  name: Create Person
+  type: http
+  seq: 2
+}
+
+post {
+  url: http://localhost:8100/people
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "firstName": "Thabo",
+    "surname": "Noma",
+    "dateOfBirth": "1998-03-21",
+    "emailAddress": "Thabo.noma@email.com",
+    "age": 26
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}
