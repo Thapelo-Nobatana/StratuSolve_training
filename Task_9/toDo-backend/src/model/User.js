@@ -39,28 +39,31 @@ class User {
 
   // Update user profile
   static async update(id, data) {
+    console.log("we are in update now!");
     const { username, email, photo } = data;
 
     let sql = "UPDATE users SET ";
     const values = [];
+
     if (username) {
-      sql += "username=?, ";
+      sql += "username=?,";
       values.push(username);
     }
     if (email) {
-      sql += "email=?, ";
+      sql += "email=?,";
       values.push(email);
     }
     if (photo) {
-      sql += "photo=?, ";
+      sql += "photo=?,";
       values.push(photo);
     }
 
     // Remove trailing comma
-    sql = sql.slice(0, -2);
+    sql = sql.slice(0, -1);
     sql += " WHERE id=?";
     values.push(id);
-
+    console.log(values);
+    console.log(sql);
     await db.query(sql, values);
   }
 
@@ -142,8 +145,11 @@ class User {
   }
 
   // Get all users (optional admin method)
-  static async findAll() {
-    const [rows] = await db.query("SELECT * FROM users");
+  static async findAll(number) {
+    const sql = `SELECT * FROM users 
+                 LIMIT ${number}`;
+
+    const [rows] = await db.query(sql);
     return rows;
   }
 }

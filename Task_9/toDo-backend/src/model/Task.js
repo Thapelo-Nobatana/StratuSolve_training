@@ -26,8 +26,9 @@ class Task {
 
   // load task user
 
-  static async loadByUser(userid) {
+  static async loadByUser(userid = null, limitNum) {
     let ConditionStr = userid ? "WHERE tasks.user_id = ?" : "";
+    let limitCon = limitNum ? " LIMIT = ?" : "";
     const sql = ` SELECT
       tasks.id,
       tasks.title,
@@ -40,8 +41,9 @@ class Task {
     FROM tasks
     LEFT JOIN categories ON tasks.category_id = categories.id
     ${ConditionStr}
-    ORDER BY tasks.id DESC`;
-    const [rows] = await db.query(sql, [userid]);
+    ORDER BY tasks.id DESC
+    ${limitCon}`;
+    const [rows] = await db.query(sql, [userid, limitNum]);
     return rows.map((row) => ({
       id: row.id,
       title: row.title,
@@ -108,7 +110,8 @@ class Task {
   }
 
   // Get all tasks by user
-  static async findAllWithUsers() {
+  static async findAllWithUsers(number) {
+    let limitCon = number ? "LIMIT ?" : "";
     const sql = `SELECT
       tasks.id,
       tasks.title,
@@ -117,17 +120,19 @@ class Task {
       tasks.user_id,
       users.username,
       users.email,
+      users.photo,
       categories.id AS category_id,
       categories.name AS category_name,
       categories.color AS category_color
     FROM tasks
     JOIN users ON tasks.user_id = users.id
     LEFT JOIN categories ON tasks.category_id = categories.id
-    ORDER BY tasks.id DESC`;
+    ORDER BY tasks.id DESC
+    ${limitCon}`;
     // const [result] = await db.query(
     //   "SELECT tasks.*, users.username, users.email FROM tasks JOIN users ON tasks.user_id = users.id"
     // );
-    const [rows] = await db.query(sql);
+    const [rows] = await db.query(sql, [number]);
     return rows.map((row) => ({
       id: row.id,
       title: row.title,
@@ -136,6 +141,7 @@ class Task {
       user_id: row.user_id,
       username: row.username,
       email: row.email,
+      photo: row.photo,
       category: row.category_id
         ? {
             id: row.category_id,

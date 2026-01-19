@@ -7,6 +7,9 @@ import User from "./model/user.js";
 import Category from "./model/Category.js";
 import { isAdmin } from "./utils/isAdmin.js";
 import { parseBody } from "./utils/parseBody.js";
+import formidable from "formidable";
+import fs from "fs";
+import path from "path";
 
 // session helpers
 import {
@@ -30,7 +33,7 @@ function send(res, status, data) {
 // this is the server handler
 
 async function handleClient(req, res) {
-  res.setHeader("Access-Control-Allow-Origin", `http://${hostName}:5173`);
+  res.setHeader("Access-Control-Allow-Origin", `http://${hostName}:5174`);
   res.setHeader(
     "Access-Control-Allow-Methods",
     "GET, POST, PUT, DELETE, OPTIONS"
@@ -50,7 +53,7 @@ async function handleClient(req, res) {
   const cookies = parseCookies(req.headers.cookie);
   const session = cookies.sid ? getSession(cookies.sid) : null;
   const user = session ? await User.findById(session.userId) : null;
-
+  console.log(user);
   // GET USER CHECK
 
   if (req.method === "GET" && req.url === "/auth/me") {
@@ -60,7 +63,13 @@ async function handleClient(req, res) {
     }
 
     send(res, 200, {
-      user: { id: user.id, username: user.username, role: user.role },
+      user: {
+        id: user.id,
+        username: user.username,
+        email: user.email,
+        role: user.role,
+        photo: user.photo,
+      },
     });
     return;
   }
@@ -170,14 +179,15 @@ async function handleClient(req, res) {
   }
   // USER ROUTES
   // Get users
-  if (req.method === "GET" && req.url === "/admin/users") {
+  if (req.method === "POST" && req.url === "/admin/users") {
     try {
       if (!isAdmin(user)) {
         send(res, 400, { error: " Admin only" });
         return;
       }
-
-      let users = await User.findAll();
+      let body = await parseBody(req);
+      let number = body.num || 5;
+      let users = await User.findAll(number);
 
       send(res, 200, users);
       // console.log("all users:", users);
@@ -264,35 +274,148 @@ async function handleClient(req, res) {
   }
 
   // update user Profile
+  // if (req.method === "PUT" && req.url === "/auth/update") {
+  //   if (!user) {
+  //     send(res, 401, { error: "Not authenticated" });
+  //     return;
+  //   }
+  //   const form = new formidable.IncomingForm();
+  //   const assetsDir = path.join(process.cwd(), "assets");
+
+  //   //  const updateData = {};
+  //   //  if (fields.username) updateData.username = fields.username;
+  //   //  if (fields.email) updateData.email = fields.email;
+
+  //   //  if (files.photo) {
+  //   //    const file = files.photo;
+  //   //    updateData.photo = `/uploads/${file.newFilename}`; // store path in DB
+  //   //  }
+
+  //   try {
+  //     // const body = await parseBody(req);
+
+  //     // // Only allow specific fields to be updated
+  //     // const allowedFields = ["username", "email", "photo"];
+  //     // const updateData = {};
+
+  //     // for (let field of allowedFields) {
+  //     //   if (body[field] !== undefined) {
+  //     //     updateData[field] = body[field];
+  //     //   }
+  //     // }
+
+  //     // if (Object.keys(updateData).length === 0) {
+  //     //   send(res, 400, { error: "No valid fields to update" });
+  //     //   return;
+  //     // }
+
+  //     // // Call User.update with the logged-in user's ID
+  //     // await User.update(user.id, updateData);
+
+  //     // // Return updated user info
+  //     // const updatedUser = await User.findById(user.id);
+  //     // send(res, 200, {
+  //     //   message: "Profile updated",
+  //     //   user: {
+  //     //     id: updatedUser.id,
+  //     //     username: updatedUser.username,
+  //     //     email: updatedUser.email,
+  //     //     photo: updatedUser.photo,
+  //     //   },
+  //     // });
+
+  //   } catch (err) {
+  //     // console.error("Profile update error:", err);
+  //     return send(res, 500, { message: "Server error" });
+  //   }
+  // }
+
+  // if (req.method === "PUT" && req.url === "/auth/update") {
+  //   if (!user) {
+  //     send(res, 401, { error: "Not authenticated" });
+  //     return;
+  //   }
+
+  //   // const form = new formidable.IncomingForm();
+  //   const form = formidable({
+  //     assetsDir: path.join(
+  //       process.cwd(),
+  //       "/Users/thapelo/Projects/StratuSolve_training/Task_8/toDo-app/src/lib/assets"
+  //     ),
+  //     keepExtensions: true,
+  //     maxFileSize: 10 * 1024 * 1024, //  10MB limit
+  //   });
+  //   // const assetsDir = path.join(process.cwd(), "assets");
+  //   // if (!fs.existsSync(assetsDir)) fs.mkdirSync(assetsDir);
+
+  //   // form.assetsDir = assetsDir;
+  //   // form.keepExtensions = true;
+
+  //   form.parse(req, async (err, fields, files) => {
+  //     if (err) {
+  //       send(res, 500, { error: "Failed to parse form data" });
+  //       return;
+  //     }
+
+  //     const updateData = {};
+  //     if (fields.username) updateData.username = fields.username;
+  //     if (fields.email) updateData.email = fields.email;
+
+  //     if (files.photo) {
+  //       const file = files.photo;
+  //       updateData.photo = `/asssets/${file.newFilename}`;
+  //     }
+
+  //     try {
+  //       await User.update(user.id, updateData);
+
+  //       const updatedUser = await User.findById(user.id);
+  //       send(res, 200, {
+  //         message: "Profile updated",
+  //         user: {
+  //           id: updatedUser.id,
+  //           username: updatedUser.username,
+  //           email: updatedUser.email,
+  //           photo: updatedUser.photo,
+  //         },
+  //       });
+  //     } catch (err) {
+  //       console.error(err);
+  //       send(res, 500, { message: "Server error" });
+  //     }
+  //   });
+  // }
+  // UPDATE USER PROFILE
   if (req.method === "PUT" && req.url === "/auth/update") {
     if (!user) {
-      send(res, 401, { error: "Not authenticated" });
-      return;
+      return send(res, 400, { error: "Not authanticated" });
     }
 
     try {
       const body = await parseBody(req);
 
-      // Only allow specific fields to be updated
-      const allowedFields = ["username", "email", "photo"];
-      const updateData = {};
-
-      for (let field of allowedFields) {
-        if (body[field] !== undefined) {
-          updateData[field] = body[field];
-        }
-      }
-
-      if (Object.keys(updateData).length === 0) {
-        send(res, 400, { error: "No valid fields to update" });
+      const { username, email, photo } = body;
+      console.log(photo);
+      // validate input
+      if (!username && !email && !photo) {
+        send(res, 400, { error: "No data to update" });
         return;
       }
 
-      // Call User.update with the logged-in user's ID
+      const updateData = {};
+
+      if (typeof username === "string") updateData.username = username;
+      if (typeof email === "string") updateData.email = email;
+
+      // photo is BASE64 string (or null)
+      if (typeof photo === "string") {
+        updateData.photo = photo;
+      }
+      console.log("USER ID ", user.id);
       await User.update(user.id, updateData);
 
-      // Return updated user info
       const updatedUser = await User.findById(user.id);
+
       send(res, 200, {
         message: "Profile updated",
         user: {
@@ -302,9 +425,11 @@ async function handleClient(req, res) {
           photo: updatedUser.photo,
         },
       });
+      return;
     } catch (err) {
-      // console.error("Profile update error:", err);
-      send(res, 500, { message: "Server error" });
+      console.error("Update profile error:", err);
+      send(res, 500, { error: "Server error" });
+      return;
     }
   }
 
@@ -377,13 +502,16 @@ async function handleClient(req, res) {
 
   // TASK WITH USER (ADMIN ONLY)
 
-  if (req.method === "GET" && req.url === "/admin/tasks") {
+  if (req.method === "POST" && req.url === "/admin/tasks") {
     if (!isAdmin(user)) {
       send(res, 400, { message: "Admin only" });
       return;
     }
 
-    const tasks = await Task.findAllWithUsers();
+    let body = await parseBody(req);
+    let number = body.num;
+    const tasks = await Task.findAllWithUsers(number);
+    // const tasks = await Task.loadByUser(number);
     send(res, 200, tasks);
     return;
   }
